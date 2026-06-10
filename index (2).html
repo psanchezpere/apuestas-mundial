@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>⚽ WC·2026·APUESTAS</title>
+<style>
+:root {
+  --bg: #070f1a;
+  --surf: #0a1628;
+  --surf2: #0d1f38;
+  --cyan: #00ffc8;
+  --cyan12: rgba(0,255,200,.12);
+  --cyan25: rgba(0,255,200,.25);
+  --cyan40: rgba(0,255,200,.40);
+  --gold: #f0b429;
+  --green: #00e878;
+  --red: #ff4d6a;
+  --purple: #c77dff;
+  --txt: #e8f4f0;
+  --txt2: #7a9e96;
+  --txt3: #3a5e58;
+  --brd: rgba(0,255,200,.14);
+  --brd2: rgba(0,255,200,.30);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  background: var(--bg); color: var(--txt);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px; line-height: 1.5; min-height: 100%;
+}
+body {
+  padding-top: calc(54px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  -webkit-overflow-scrolling: touch;
+}
+
+/* HEADER */
+#hdr {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: calc(54px + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
+  background: rgba(7,15,26,.97); border-bottom: 1px solid var(--brd);
+  z-index: 500; display: -webkit-flex; display: flex;
+  -webkit-align-items: center; align-items: center;
+  padding-left: 16px; padding-right: 14px; gap: 10px;
+}
+#hdr-logo { font-size: 15px; font-weight: 700; color: var(--cyan); letter-spacing: .04em; -webkit-flex:1; flex:1; }
+#sync-dot { font-size: 18px; transition: color .3s; }
+#sync-dot.ok     { color: var(--cyan); }
+#sync-dot.loading{ color: var(--gold); }
+#sync-dot.error  { color: var(--red);  }
+
+/* NAV */
+#nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: calc(56px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: rgba(7,15,26,.97); border-top: 1px solid var(--brd);
+  z-index: 500; display: -webkit-flex; display: flex;
+}
+.nav-btn {
+  -webkit-flex:1; flex:1;
+  display: -webkit-flex; display: flex;
+  -webkit-flex-direction: column; flex-direction: column;
+  -webkit-align-items: center; align-items: center;
+  -webkit-justify-content: center; justify-content: center;
+  background: none; border: none; border-top: 2px solid transparent;
+  color: var(--txt2); font-size: 10px; font-weight: 700;
+  cursor: pointer; min-height: 44px; gap: 3px; letter-spacing: .05em;
+  transition: color .2s, border-color .2s;
+}
+.nav-btn .ico { font-size: 20px; line-height: 1; }
+.nav-btn.active { color: var(--cyan); border-top-color: var(--cyan); }
+
+/* LOADER */
+#loader {
+  position: fixed; inset: 0; background: var(--bg);
+  display: -webkit-flex; display: flex;
+  -webkit-flex-direction: column; flex-direction: column;
+  -webkit-align-items: center; align-items: center;
+  -webkit-justify-content: center; justify-content: center;
+  z-index: 9999; gap: 20px; transition: opacity .4s;
+}
+.spinner { width: 44px; height: 44px; border: 3px solid var(--brd2); border-top-color: var(--cyan); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* SCREENS */
+.screen { display: none; padding: 14px; }
+.screen.active { display: block; }
+
+/* STAT CARDS */
+.stat-row { display: -webkit-flex; display: flex; gap: 8px; margin-bottom: 14px; }
+.stat-card { -webkit-flex:1; flex:1; background: var(--surf); border: 1px solid var(--brd); border-radius: 10px; padding: 11px 12px; }
+.stat-card .sv { font-size: 19px; font-weight: 700; }
+.stat-card .sl { font-size: 10px; color: var(--txt2); letter-spacing: .04em; text-transform: uppercase; margin-top: 2px; }
+.sv-pos { color: var(--green); }
+.sv-neg { color: var(--red); }
+.sv-neu { color: var(--cyan); }
+
+/* PLAYER CARDS */
+.player-card { background: var(--surf); border: 1px solid var(--brd); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+.player-head { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 13px 14px; gap: 12px; cursor: pointer; }
+.player-avatar { width: 36px; height: 36px; border-radius: 50%; display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; -webkit-justify-content:center; justify-content:center; font-size: 15px; font-weight: 700; flex-shrink: 0; border: 2px solid; }
+.player-info { -webkit-flex:1; flex:1; }
+.player-name { font-size: 16px; font-weight: 700; color: var(--txt); }
+.player-sub { font-size: 11px; color: var(--txt2); margin-top: 1px; }
+.player-balance { font-size: 22px; font-weight: 700; text-align: right; flex-shrink: 0; }
+.player-chevron { color: var(--txt3); font-size: 13px; transition: transform .3s; margin-left: 6px; flex-shrink: 0; }
+.player-chevron.open { transform: rotate(180deg); }
+.player-detail { display: none; border-top: 1px solid var(--brd); }
+.player-detail.open { display: block; }
+
+/* DETAIL ROWS */
+.detail-jornada-sep { font-size: 10px; font-weight: 700; color: var(--txt3); letter-spacing: .07em; padding: 7px 14px 4px; background: var(--surf2); }
+.detail-row { padding: 9px 14px; border-bottom: 1px solid var(--brd); }
+.detail-row:last-child { border-bottom: none; }
+.detail-match-title { font-size: 13px; font-weight: 600; color: var(--txt); margin-bottom: 4px; }
+.detail-meta { display: -webkit-flex; display: flex; gap: 14px; -webkit-flex-wrap: wrap; flex-wrap: wrap; -webkit-align-items: center; align-items: center; }
+.detail-sel { font-size: 12px; color: var(--txt2); -webkit-flex:1; flex:1; min-width: 120px; }
+.detail-sel em { color: var(--txt); font-style: normal; }
+.detail-cuota { font-size: 11px; color: var(--txt2); white-space: nowrap; }
+.detail-cuota span { color: var(--gold); font-weight: 700; }
+.detail-importe { font-size: 11px; color: var(--txt2); white-space: nowrap; }
+.detail-bal-pos { color: var(--green); font-weight: 700; font-size: 13px; white-space: nowrap; }
+.detail-bal-neg { color: var(--red); font-weight: 700; font-size: 13px; white-space: nowrap; }
+.detail-bal-neu { color: var(--txt3); font-style: italic; font-size: 12px; white-space: nowrap; }
+.detail-empty { padding: 16px 14px; color: var(--txt3); font-size: 12px; font-style: italic; }
+.detail-actions { display: -webkit-flex; display: flex; gap: 6px; margin-top: 8px; }
+.btn-win {
+  -webkit-flex:1; flex:1;
+  background: rgba(0,232,120,.12); border: 1px solid rgba(0,232,120,.35);
+  color: var(--green); border-radius: 7px;
+  padding: 7px 6px; font-size: 12px; font-weight: 700;
+  cursor: pointer; min-height: 36px; letter-spacing: .02em;
+  transition: background .15s;
+}
+.btn-win:active { background: rgba(0,232,120,.25); }
+.btn-win.applied { background: rgba(0,232,120,.22); border-color: var(--green); }
+.btn-fail {
+  -webkit-flex:1; flex:1;
+  background: rgba(255,77,106,.10); border: 1px solid rgba(255,77,106,.30);
+  color: var(--red); border-radius: 7px;
+  padding: 7px 6px; font-size: 12px; font-weight: 700;
+  cursor: pointer; min-height: 36px; letter-spacing: .02em;
+  transition: background .15s;
+}
+.btn-fail:active { background: rgba(255,77,106,.22); }
+.btn-fail.applied { background: rgba(255,77,106,.20); border-color: var(--red); }
+
+/* SECTION SEP */
+.section-sep { font-size: 11px; font-weight: 700; color: var(--txt2); letter-spacing: .08em; padding: 12px 0 6px; border-bottom: 1px solid var(--brd); margin-bottom: 8px; }
+
+/* GROUP PILLS */
+.pills-wrap { display: -webkit-flex; display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
+.pills-wrap::-webkit-scrollbar { display: none; }
+.pill { background: var(--surf2); border: 1px solid var(--brd); color: var(--txt2); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0; min-height: 32px; display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; transition: background .15s, color .15s; }
+.pill.active { background: var(--cyan25); color: var(--cyan); border-color: var(--cyan); }
+
+/* MATCH CARDS */
+.match-card { background: var(--surf); border: 1px solid var(--brd); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+.match-head { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 11px 14px; gap: 10px; cursor: pointer; }
+.badge { background: var(--cyan12); color: var(--cyan); border: 1px solid var(--brd2); border-radius: 6px; padding: 2px 7px; font-size: 10px; font-weight: 700; letter-spacing: .04em; flex-shrink: 0; }
+.match-teams { -webkit-flex:1; flex:1; font-size: 13px; color: var(--txt); }
+.match-bet-count { font-size: 11px; color: var(--txt2); white-space: nowrap; }
+.match-chevron { color: var(--txt3); font-size: 12px; transition: transform .3s; flex-shrink: 0; }
+.match-chevron.open { transform: rotate(180deg); }
+.match-body { display: none; border-top: 1px solid var(--brd); padding: 12px 14px; }
+.match-body.open { display: block; }
+
+/* BET ENTRY */
+.bet-entry { background: var(--surf2); border: 1px solid var(--brd); border-radius: 8px; padding: 11px 12px; margin-bottom: 10px; }
+.bet-entry-head { display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; gap: 8px; margin-bottom: 10px; }
+.bet-player-tag { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; letter-spacing: .03em; }
+.bet-del { margin-left: auto; background: rgba(255,77,106,.1); border: 1px solid rgba(255,77,106,.25); color: var(--red); border-radius: 6px; padding: 3px 10px; font-size: 12px; cursor: pointer; min-height: 30px; }
+
+/* BET FIELDS GRID */
+.bet-grid { display: -webkit-flex; display: flex; gap: 8px; margin-bottom: 8px; -webkit-flex-wrap: wrap; flex-wrap: wrap; }
+.bet-field { display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; gap: 4px; }
+.bet-field label { font-size: 10px; color: var(--txt2); letter-spacing: .04em; text-transform: uppercase; }
+.bet-input { background: var(--surf); border: 1px solid var(--brd2); color: var(--txt); border-radius: 7px; padding: 8px 10px; font-size: 16px; outline: none; -webkit-appearance: none; width: 100%; }
+.bet-input:focus { border-color: var(--cyan); }
+.bf-num  { width: 96px; }
+.bf-sel  { -webkit-flex:1; flex:1; min-width: 160px; resize: vertical; min-height: 60px; font-family: inherit; }
+
+/* ganancia color feedback */
+.bet-input.gan-ok  { border-color: var(--green); color: var(--green); }
+.bet-input.gan-ko  { border-color: var(--red);   color: var(--red);   }
+
+.bet-save-row { display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; gap: 10px; margin-top: 4px; }
+.btn-save { background: var(--cyan25); border: 1px solid var(--cyan); color: var(--cyan); border-radius: 8px; padding: 8px 20px; font-size: 14px; font-weight: 700; cursor: pointer; min-height: 40px; }
+.btn-save:active { background: var(--cyan40); }
+.save-msg { font-size: 11px; color: var(--cyan); font-weight: 600; letter-spacing: .03em; display: none; }
+
+/* ADD BET */
+.btn-add-bet { background: var(--cyan12); border: 1px dashed var(--brd2); color: var(--txt2); border-radius: 8px; padding: 9px 0; font-size: 12px; font-weight: 600; cursor: pointer; display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; -webkit-justify-content:center; justify-content:center; gap: 5px; min-height: 40px; -webkit-flex:1; flex:1; transition: background .15s; }
+.btn-add-bet:active { background: var(--cyan25); }
+
+/* PLAYER COLORS */
+.angel-avatar { background: rgba(0,255,200,.12); border-color: var(--cyan); color: var(--cyan); }
+.pedro-avatar { background: rgba(240,180,41,.12); border-color: var(--gold); color: var(--gold); }
+.tuli-avatar  { background: rgba(199,125,255,.12); border-color: var(--purple); color: var(--purple); }
+.angel-tag { background: rgba(0,255,200,.15); color: var(--cyan); border: 1px solid var(--brd2); }
+.pedro-tag { background: rgba(240,180,41,.15); color: var(--gold); border: 1px solid rgba(240,180,41,.35); }
+.tuli-tag  { background: rgba(199,125,255,.15); color: var(--purple); border: 1px solid rgba(199,125,255,.35); }
+.angel-bal { color: var(--cyan); }
+.pedro-bal { color: var(--gold); }
+.tuli-bal  { color: var(--purple); }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div style="font-size:22px;font-weight:700;color:#00ffc8;letter-spacing:.06em;">⚽ WC·2026·APUESTAS</div>
+  <div class="spinner"></div>
+  <div style="color:#7a9e96;font-size:13px;letter-spacing:.06em;">Cargando datos…</div>
+</div>
+
+<div id="hdr">
+  <div id="hdr-logo">⚽ WC·2026·APUESTAS</div>
+  <span id="sync-dot" class="ok">●</span>
+</div>
+
+<div id="nav">
+  <button class="nav-btn active" id="nav-resumen" onclick="showTab('resumen')">
+    <span class="ico">📊</span>RESUMEN
+  </button>
+  <button class="nav-btn" id="nav-registro" onclick="showTab('registro')">
+    <span class="ico">✏️</span>REGISTRO
+  </button>
+</div>
+
+<div id="screen-resumen" class="screen active"></div>
+<div id="screen-registro" class="screen"></div>
+
+<script>
+// ===================== CONFIG =====================
+var BIN_ID = '6a2987afda38895dfea789a1';
+var X_KEY  = '$2a$10$GIQhqjikc8jJPqHZxAYxuO20.FtSI3Ng5jOpARqHWMaO9/UcJmMSi';
+var BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
+
+// ===================== PARTICIPANTES =====================
+var PARTICIPANTES = ['Angel', 'Pedro', 'Tuli'];
+var PLAYER_CSS    = { Angel: 'angel', Pedro: 'pedro', Tuli: 'tuli' };
+var PLAYER_EMOJI  = { Angel: '😇', Pedro: '🎯', Tuli: '🦁' };
+
+// ===================== PARTIDOS =====================
+var GROUPS_DATA = {
+  A:[{n:'México',e:'🇲🇽'},{n:'Sudáfrica',e:'🇿🇦'},{n:'Corea del Sur',e:'🇰🇷'},{n:'Chequia',e:'🇨🇿'}],
+  B:[{n:'Canadá',e:'🇨🇦'},{n:'Bosnia-Herz.',e:'🇧🇦'},{n:'Qatar',e:'🇶🇦'},{n:'Suiza',e:'🇨🇭'}],
+  C:[{n:'Haití',e:'🇭🇹'},{n:'Escocia',e:'🏴󠁧󠁢󠁳󠁣󠁴󠁿'},{n:'Brasil',e:'🇧🇷'},{n:'Marruecos',e:'🇲🇦'}],
+  D:[{n:'EE.UU.',e:'🇺🇸'},{n:'Paraguay',e:'🇵🇾'},{n:'Australia',e:'🇦🇺'},{n:'Turquía',e:'🇹🇷'}],
+  E:[{n:'C.Marfil',e:'🇨🇮'},{n:'Ecuador',e:'🇪🇨'},{n:'Alemania',e:'🇩🇪'},{n:'Curazao',e:'🇨🇼'}],
+  F:[{n:'P.Bajos',e:'🇳🇱'},{n:'Japón',e:'🇯🇵'},{n:'Suecia',e:'🇸🇪'},{n:'Túnez',e:'🇹🇳'}],
+  G:[{n:'Irán',e:'🇮🇷'},{n:'N.Zelanda',e:'🇳🇿'},{n:'Bélgica',e:'🇧🇪'},{n:'Egipto',e:'🇪🇬'}],
+  H:[{n:'Arabia S.',e:'🇸🇦'},{n:'Uruguay',e:'🇺🇾'},{n:'España',e:'🇪🇸'},{n:'Cabo Verde',e:'🇨🇻'}],
+  I:[{n:'Francia',e:'🇫🇷'},{n:'Senegal',e:'🇸🇳'},{n:'Noruega',e:'🇳🇴'},{n:'Irak',e:'🇮🇶'}],
+  J:[{n:'Argentina',e:'🇦🇷'},{n:'Argelia',e:'🇩🇿'},{n:'Austria',e:'🇦🇹'},{n:'Jordania',e:'🇯🇴'}],
+  K:[{n:'Portugal',e:'🇵🇹'},{n:'Colombia',e:'🇨🇴'},{n:'Uzbekistán',e:'🇺🇿'},{n:'R.D.Congo',e:'🇨🇩'}],
+  L:[{n:'Inglaterra',e:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},{n:'Croacia',e:'🇭🇷'},{n:'Ghana',e:'🇬🇭'},{n:'Panamá',e:'🇵🇦'}]
+};
+var GRP_KEYS = ['A','B','C','D','E','F','G','H','I','J','K','L'];
+var JORNADA_DATES = {
+  1:{A:'11 Jun',B:'11 Jun',C:'12 Jun',D:'12 Jun',E:'13 Jun',F:'13 Jun',G:'14 Jun',H:'14 Jun',I:'15 Jun',J:'15 Jun',K:'16 Jun',L:'17 Jun'},
+  2:{A:'18 Jun',B:'18 Jun',C:'19 Jun',D:'19 Jun',E:'20 Jun',F:'20 Jun',G:'21 Jun',H:'21 Jun',I:'22 Jun',J:'22 Jun',K:'23 Jun',L:'23 Jun'},
+  3:{A:'26 Jun',B:'26 Jun',C:'26 Jun',D:'27 Jun',E:'27 Jun',F:'27 Jun',G:'26 Jun',H:'26 Jun',I:'27 Jun',J:'27 Jun',K:'26 Jun',L:'27 Jun'}
+};
+var FECHA_J = {1:'11–17 Jun',2:'18–23 Jun',3:'24–27 Jun'};
+
+var PARTIDOS = [];
+(function(){
+  var pat=[[[0,1],[2,3]],[[0,2],[3,1]],[[0,3],[1,2]]];
+  GRP_KEYS.forEach(function(g){
+    var ts=GROUPS_DATA[g], gl=g.toLowerCase();
+    for(var j=0;j<3;j++){
+      pat[j].forEach(function(pair,pi){
+        PARTIDOS.push({id:gl+(j*2+pi+1),g:g,j:j+1,f:JORNADA_DATES[j+1][g],l:ts[pair[0]],v:ts[pair[1]]});
+      });
+    }
+  });
+})();
+
+// ===================== STATE =====================
+var DATA = { apuestas: {} };
+var regFilter = 'TODOS';
+var regOpenMatchId = null;
+var openPlayerIds = {};
+
+// ===================== UTILS =====================
+function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escQ(s){ if(!s) return ''; return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function setSyncDot(st){ var d=document.getElementById('sync-dot'); if(d) d.className=st; }
+function genId(){ return 'b'+Date.now()+'_'+Math.floor(Math.random()*9999); }
+
+function fmtBal(v){
+  if(v===null||v===undefined) return null;
+  var n=parseFloat(v);
+  if(isNaN(n)) return null;
+  return (n>=0?'+':'')+n.toFixed(2)+'€';
+}
+
+// ===================== API =====================
+function apiGet(cb){
+  setSyncDot('loading');
+  var xhr=new XMLHttpRequest();
+  xhr.open('GET',BIN_URL+'/latest',true);
+  xhr.setRequestHeader('X-Master-Key',X_KEY);
+  xhr.setRequestHeader('X-Bin-Meta','false');
+  xhr.onload=function(){
+    if(xhr.status===200){
+      try{ setSyncDot('ok'); cb(null,JSON.parse(xhr.responseText)); }
+      catch(e){ setSyncDot('error'); cb(e); }
+    } else { setSyncDot('error'); cb(new Error('HTTP '+xhr.status)); }
+  };
+  xhr.onerror=function(){ setSyncDot('error'); cb(new Error('Network')); };
+  xhr.send();
+}
+
+function apiPut(data,cb){
+  setSyncDot('loading');
+  var xhr=new XMLHttpRequest();
+  xhr.open('PUT',BIN_URL,true);
+  xhr.setRequestHeader('Content-Type','application/json');
+  xhr.setRequestHeader('X-Master-Key',X_KEY);
+  xhr.onload=function(){
+    if(xhr.status===200){ setSyncDot('ok'); if(cb) cb(null); }
+    else{ setSyncDot('error'); if(cb) cb(new Error('HTTP '+xhr.status)); }
+  };
+  xhr.onerror=function(){ setSyncDot('error'); if(cb) cb(new Error('Network')); };
+  xhr.send(JSON.stringify(data));
+}
+
+// ===================== INIT =====================
+function init(){
+  if(BIN_ID==='TU_BIN_ID'){ hideLoader(); renderAll(); return; }
+  apiGet(function(err,d){
+    if(err){ hideLoader(); renderAll(); return; }
+    DATA = (!d||!d.apuestas) ? {apuestas:{}} : d;
+    hideLoader(); renderAll();
+  });
+}
+function hideLoader(){
+  var l=document.getElementById('loader');
+  l.style.opacity='0';
+  setTimeout(function(){ l.style.display='none'; },400);
+}
+
+// ===================== TABS =====================
+function showTab(tab){
+  ['resumen','registro'].forEach(function(t){
+    document.getElementById('screen-'+t).className='screen'+(t===tab?' active':'');
+    document.getElementById('nav-'+t).className='nav-btn'+(t===tab?' active':'');
+  });
+  window.scrollTo(0,0);
+  if(tab==='resumen') renderResumen();
+  if(tab==='registro') renderRegistro();
+}
+function renderAll(){ renderResumen(); renderRegistro(); }
+
+// ===================== STATS =====================
+function playerStats(name){
+  var apuestas=DATA.apuestas||{};
+  var totalImporte=0, totalGanancia=0, nbets=0, nmatches=0;
+  PARTIDOS.forEach(function(p){
+    var bets=(apuestas[p.id]||[]).filter(function(b){ return b.player===name; });
+    if(bets.length) nmatches++;
+    bets.forEach(function(b){
+      nbets++;
+      totalImporte += parseFloat(b.importe)||0;
+      if(b.ganancia!==''&&b.ganancia!==null&&b.ganancia!==undefined&&b.ganancia!=='')
+        totalGanancia += parseFloat(b.ganancia)||0;
+    });
+  });
+  return { importe:totalImporte, ganancia:totalGanancia, balance:totalGanancia-totalImporte, nbets:nbets, nmatches:nmatches };
+}
+
+function globalStats(){
+  var ti=0, tg=0, tb=0;
+  PARTICIPANTES.forEach(function(name){ var s=playerStats(name); ti+=s.importe; tg+=s.ganancia; tb+=s.nbets; });
+  return { importe:ti, ganancia:tg, balance:tg-ti, totalBets:tb };
+}
+
+// ===================== RESUMEN =====================
+function renderResumen(){
+  var el=document.getElementById('screen-resumen');
+  var gs=globalStats();
+  var html='';
+
+  // Global cards
+  html+='<div class="stat-row">';
+  html+='<div class="stat-card"><div class="sv sv-neu">'+gs.totalBets+'</div><div class="sl">Apuestas</div></div>';
+  html+='<div class="stat-card"><div class="sv sv-neg">'+gs.importe.toFixed(2)+'€</div><div class="sl">Apostado</div></div>';
+  var bc=gs.balance>0?'sv-pos':gs.balance<0?'sv-neg':'sv-neu';
+  html+='<div class="stat-card"><div class="sv '+bc+'">'+(gs.balance>=0?'+':'')+gs.balance.toFixed(2)+'€</div><div class="sl">Balance</div></div>';
+  html+='</div>';
+
+  // Player cards
+  PARTICIPANTES.forEach(function(name){
+    var s=playerStats(name);
+    var cls=PLAYER_CSS[name];
+    var bc2=s.balance>0?'sv-pos':s.balance<0?'sv-neg':'sv-neu';
+    var isOpen=!!openPlayerIds[name];
+
+    html+='<div class="player-card">';
+    html+='<div class="player-head" onclick="togglePlayer(\''+escQ(name)+'\')">';
+    html+='<div class="player-avatar '+cls+'-avatar">'+PLAYER_EMOJI[name]+'</div>';
+    html+='<div class="player-info">';
+    html+='<div class="player-name">'+esc(name)+'</div>';
+    html+='<div class="player-sub">'+s.nbets+' apuesta'+(s.nbets!==1?'s':'')+' · '+s.importe.toFixed(2)+'€ apostados</div>';
+    html+='</div>';
+    html+='<div class="player-balance '+cls+'-bal '+bc2+'">'+(s.balance>=0?'+':'')+s.balance.toFixed(2)+'€</div>';
+    html+='<div class="player-chevron'+(isOpen?' open':'')+'" id="pchev-'+cls+'">▼</div>';
+    html+='</div>';
+    html+='<div class="player-detail'+(isOpen?' open':'')+'" id="pdetail-'+cls+'">';
+    if(isOpen) html+=buildPlayerDetail(name);
+    html+='</div>';
+    html+='</div>';
+  });
+
+  el.innerHTML=html;
+}
+
+function togglePlayer(name){
+  var cls=PLAYER_CSS[name];
+  var panel=document.getElementById('pdetail-'+cls);
+  var chev=document.getElementById('pchev-'+cls);
+  if(!panel||!chev) return;
+  if(openPlayerIds[name]){
+    openPlayerIds[name]=false;
+    panel.className='player-detail'; panel.innerHTML='';
+    chev.className='player-chevron';
+  } else {
+    openPlayerIds[name]=true;
+    panel.innerHTML=buildPlayerDetail(name);
+    panel.className='player-detail open';
+    chev.className='player-chevron open';
+  }
+}
+
+function buildPlayerDetail(name){
+  var apuestas=DATA.apuestas||{};
+  var html=''; var hasAny=false; var currentJ=0;
+  var ordered=[];
+  [1,2,3].forEach(function(j){ GRP_KEYS.forEach(function(g){ PARTIDOS.forEach(function(p){ if(p.j===j&&p.g===g) ordered.push(p); }); }); });
+
+  ordered.forEach(function(p){
+    var bets=(apuestas[p.id]||[]).filter(function(b){ return b.player===name; });
+    if(!bets.length) return;
+    hasAny=true;
+    if(p.j!==currentJ){ currentJ=p.j; html+='<div class="detail-jornada-sep">▸ JORNADA '+p.j+'</div>'; }
+
+    bets.forEach(function(b){
+      var imp=parseFloat(b.importe)||0;
+      var gan=b.ganancia!==''&&b.ganancia!==null&&b.ganancia!==undefined ? parseFloat(b.ganancia) : null;
+      var bal=gan!==null ? gan-imp : null;
+
+      var balHTML='';
+      if(bal===null) balHTML='<span class="detail-bal-neu">pendiente</span>';
+      else if(bal>=0) balHTML='<span class="detail-bal-pos">+'+bal.toFixed(2)+'€</span>';
+      else balHTML='<span class="detail-bal-neg">'+bal.toFixed(2)+'€</span>';
+
+      // calculate expected win from cuota × importe
+      var cuota=b.cuota!==''&&b.cuota!==null&&b.cuota!==undefined ? parseFloat(b.cuota) : null;
+      var prevista=(!isNaN(imp)&&cuota&&!isNaN(cuota)) ? imp*cuota : null;
+
+      // button states
+      var isWin  = bal!==null && bal>0;
+      var isFail = bal!==null && gan===0;
+
+      html+='<div class="detail-row">';
+      html+='<div class="detail-match-title">'+p.l.e+' '+esc(p.l.n)+' <span style="color:var(--txt3)">vs</span> '+esc(p.v.n)+' '+p.v.e+'</div>';
+      html+='<div class="detail-meta">';
+      if(b.selecciones&&b.selecciones.trim()){
+        html+='<div class="detail-sel"><em>'+esc(b.selecciones)+'</em></div>';
+      } else {
+        html+='<div class="detail-sel" style="font-style:italic;color:var(--txt3)">sin descripción</div>';
+      }
+      if(cuota&&!isNaN(cuota)){
+        html+='<div class="detail-cuota">Cuota <span>'+esc(b.cuota)+'</span></div>';
+      }
+      html+='<div class="detail-importe">'+imp.toFixed(2)+'€ apostados</div>';
+      html+=balHTML;
+      html+='</div>';
+
+      // Action buttons — find the match pid for this bet
+      var _pid=p.id; var _bid=b.id;
+      var _prevista=prevista!==null ? prevista.toFixed(2) : '';
+      html+='<div class="detail-actions">';
+      html+='<button class="btn-win'+(isWin?' applied':'')+'" onclick="applyWin(\''+escQ(_pid)+'\',\''+escQ(_bid)+'\',\''+escQ(_prevista)+'\')">';
+      html+=(isWin ? '✅ Ganada' : '🏆 Marcar ganada')+(prevista!==null&&!isWin?' &nbsp;<span style="opacity:.6;font-size:11px;">+'+prevista.toFixed(2)+'€ prev.</span>':'');
+      html+='</button>';
+      html+='<button class="btn-fail'+(isFail?' applied':'')+'" onclick="applyFail(\''+escQ(_pid)+'\',\''+escQ(_bid)+'\')">';
+      html+=(isFail ? '❌ Fallada' : '❌ Marcar fallada');
+      html+='</button>';
+      html+='</div>';
+      html+='</div>';
+    });
+  });
+
+  if(!hasAny) html='<div class="detail-empty">Sin apuestas registradas aún.</div>';
+  return html;
+}
+
+// ===================== REGISTRO =====================
+function renderRegistro(){
+  var el=document.getElementById('screen-registro');
+  var apuestas=DATA.apuestas||{};
+  var html='';
+
+  html+='<div class="pills-wrap">';
+  html+='<div class="pill'+(regFilter==='TODOS'?' active':'')+'" onclick="regFilter=\'TODOS\';renderRegistro()">TODOS</div>';
+  GRP_KEYS.forEach(function(g){
+    html+='<div class="pill'+(regFilter===g?' active':'')+'" onclick="regFilter=\''+g+'\';renderRegistro()">G'+g+'</div>';
+  });
+  html+='</div>';
+
+  var ordered=[];
+  [1,2,3].forEach(function(j){ GRP_KEYS.forEach(function(g){ PARTIDOS.forEach(function(p){ if(p.j===j&&p.g===g) ordered.push(p); }); }); });
+
+  var currentJ=0;
+  ordered.forEach(function(p){
+    if(regFilter!=='TODOS'&&p.g!==regFilter) return;
+    if(p.j!==currentJ){
+      currentJ=p.j;
+      html+='<div class="section-sep">▸ JORNADA '+p.j+' &nbsp;·&nbsp; '+FECHA_J[p.j]+'</div>';
+    }
+    var bets=apuestas[p.id]||[];
+    var nBets=bets.length;
+    var isOpen=regOpenMatchId===p.id;
+
+    html+='<div class="match-card" id="mc-'+p.id+'">';
+    html+='<div class="match-head" onclick="toggleMatch(\''+p.id+'\')">';
+    html+='<div class="badge">G'+p.g+' J'+p.j+'</div>';
+    html+='<div class="match-teams">'+p.l.e+' '+esc(p.l.n)+' <span style="color:var(--txt3)">vs</span> '+esc(p.v.n)+' '+p.v.e+'</div>';
+    if(nBets>0) html+='<div class="match-bet-count">'+nBets+' apuesta'+(nBets!==1?'s':'')+'</div>';
+    html+='<div class="match-chevron'+(isOpen?' open':'')+'">▼</div>';
+    html+='</div>';
+    html+='<div class="match-body'+(isOpen?' open':'')+'" id="mb-'+p.id+'">';
+    if(isOpen) html+=buildMatchBody(p.id);
+    html+='</div>';
+    html+='</div>';
+  });
+
+  el.innerHTML=html;
+}
+
+function toggleMatch(pid){
+  var body=document.getElementById('mb-'+pid);
+  var card=document.getElementById('mc-'+pid);
+  if(!body||!card) return;
+  var chv=card.querySelector('.match-chevron');
+
+  if(regOpenMatchId===pid){
+    regOpenMatchId=null;
+    body.className='match-body'; body.innerHTML='';
+    if(chv) chv.className='match-chevron';
+  } else {
+    if(regOpenMatchId){
+      var pb=document.getElementById('mb-'+regOpenMatchId);
+      var pc=document.getElementById('mc-'+regOpenMatchId);
+      if(pb){ pb.className='match-body'; pb.innerHTML=''; }
+      if(pc){ var pchv=pc.querySelector('.match-chevron'); if(pchv) pchv.className='match-chevron'; }
+    }
+    regOpenMatchId=pid;
+    body.innerHTML=buildMatchBody(pid);
+    body.className='match-body open';
+    if(chv) chv.className='match-chevron open';
+  }
+}
+
+function buildMatchBody(pid){
+  var bets=(DATA.apuestas&&DATA.apuestas[pid])||[];
+  var html='';
+  bets.forEach(function(b){ html+=buildBetEntry(pid,b); });
+
+  // Add-bet buttons
+  html+='<div style="display:-webkit-flex;display:flex;gap:6px;margin-top:4px;">';
+  PARTICIPANTES.forEach(function(name){
+    html+='<button class="btn-add-bet" onclick="addBet(\''+pid+'\',\''+escQ(name)+'\')">'+PLAYER_EMOJI[name]+'<br>'+esc(name)+'</button>';
+  });
+  html+='</div>';
+  return html;
+}
+
+function buildBetEntry(pid, b){
+  var cls=PLAYER_CSS[b.player]||'angel';
+  // ganancia coloring
+  var ganCls='';
+  if(b.ganancia!==''&&b.ganancia!==null&&b.ganancia!==undefined&&b.ganancia!==''){
+    var g=parseFloat(b.ganancia), im=parseFloat(b.importe)||0;
+    if(!isNaN(g)) ganCls=(g-im)>=0 ? ' gan-ok' : ' gan-ko';
+  }
+
+  var html='';
+  html+='<div class="bet-entry" id="be-'+b.id+'">';
+
+  // Head: player tag + delete
+  html+='<div class="bet-entry-head">';
+  html+='<span class="bet-player-tag '+cls+'-tag">'+PLAYER_EMOJI[b.player]+' '+esc(b.player)+'</span>';
+  html+='<button class="bet-del" onclick="deleteBet(\''+escQ(pid)+'\',\''+escQ(b.id)+'\')">✕ Eliminar</button>';
+  html+='</div>';
+
+  // Row 1: importe + cuota
+  html+='<div class="bet-grid">';
+  html+='<div class="bet-field">';
+  html+='<label>Importe €</label>';
+  html+='<input type="number" inputmode="decimal" class="bet-input bf-num" id="imp-'+b.id+'" value="'+esc(b.importe)+'" placeholder="0.00" step="0.01">';
+  html+='</div>';
+  html+='<div class="bet-field">';
+  html+='<label>Cuota</label>';
+  html+='<input type="number" inputmode="decimal" class="bet-input bf-num" id="cuo-'+b.id+'" value="'+esc(b.cuota)+'" placeholder="1.80" step="0.01" min="1">';
+  html+='</div>';
+  html+='<div class="bet-field">';
+  html+='<label>Ganancia €</label>';
+  html+='<input type="number" inputmode="decimal" class="bet-input bf-num'+ganCls+'" id="gan-'+b.id+'" value="'+esc(b.ganancia)+'" placeholder="pendiente" step="0.01">';
+  html+='</div>';
+  html+='</div>';
+
+  // Row 2: selecciones (textarea)
+  html+='<div class="bet-field" style="margin-bottom:10px;">';
+  html+='<label>Selecciones / descripción</label>';
+  html+='<textarea class="bet-input bf-sel" id="sel-'+b.id+'" placeholder="Ej: 1X2 Local, +2.5 goles, Ambos marcan…">'+esc(b.selecciones)+'</textarea>';
+  html+='</div>';
+
+  // Save
+  html+='<div class="bet-save-row">';
+  html+='<button class="btn-save" onclick="saveBet(\''+escQ(pid)+'\',\''+escQ(b.id)+'\')">Guardar</button>';
+  html+='<span class="save-msg" id="smsg-'+b.id+'">▸ Guardado ✓</span>';
+  html+='</div>';
+
+  html+='</div>'; // .bet-entry
+  return html;
+}
+
+// ===================== ACTIONS =====================
+function addBet(pid, player){
+  if(!DATA.apuestas) DATA.apuestas={};
+  if(!DATA.apuestas[pid]) DATA.apuestas[pid]=[];
+  DATA.apuestas[pid].push({ id:genId(), player:player, importe:'', cuota:'', ganancia:'', selecciones:'' });
+  var body=document.getElementById('mb-'+pid);
+  if(body) body.innerHTML=buildMatchBody(pid);
+}
+
+function saveBet(pid, bid){
+  if(!DATA.apuestas||!DATA.apuestas[pid]) return;
+  var bet=null;
+  DATA.apuestas[pid].forEach(function(b){ if(b.id===bid) bet=b; });
+  if(!bet) return;
+
+  var impEl=document.getElementById('imp-'+bid);
+  var cuoEl=document.getElementById('cuo-'+bid);
+  var ganEl=document.getElementById('gan-'+bid);
+  var selEl=document.getElementById('sel-'+bid);
+
+  if(impEl) bet.importe=impEl.value;
+  if(cuoEl) bet.cuota=cuoEl.value;
+  if(ganEl) bet.ganancia=ganEl.value;
+  if(selEl) bet.selecciones=selEl.value;
+
+  apiPut(DATA, function(err){
+    if(err){ setSyncDot('error'); return; }
+    var msg=document.getElementById('smsg-'+bid);
+    if(msg){ msg.style.display='inline'; setTimeout(function(){ msg.style.display='none'; },2500); }
+    // update ganancia field color without full re-render
+    var ganInput=document.getElementById('gan-'+bid);
+    if(ganInput&&bet.ganancia!==''){
+      var g=parseFloat(bet.ganancia), im=parseFloat(bet.importe)||0;
+      if(!isNaN(g)){ ganInput.className='bet-input bf-num'+((g-im)>=0?' gan-ok':' gan-ko'); }
+    }
+    renderResumen();
+  });
+}
+
+function deleteBet(pid, bid){
+  if(!DATA.apuestas||!DATA.apuestas[pid]) return;
+  DATA.apuestas[pid]=DATA.apuestas[pid].filter(function(b){ return b.id!==bid; });
+  apiPut(DATA, function(err){
+    if(err){ setSyncDot('error'); return; }
+    var body=document.getElementById('mb-'+pid);
+    if(body) body.innerHTML=buildMatchBody(pid);
+    renderResumen();
+  });
+}
+
+// ===================== WIN / FAIL =====================
+function findBet(pid, bid){
+  if(!DATA.apuestas||!DATA.apuestas[pid]) return null;
+  var found=null;
+  DATA.apuestas[pid].forEach(function(b){ if(b.id===bid) found=b; });
+  return found;
+}
+
+function applyWin(pid, bid, prevista){
+  var bet=findBet(pid,bid);
+  if(!bet) return;
+  // If already marked as win (ganancia > 0), toggle back to pending
+  var gan=bet.ganancia!==''&&bet.ganancia!==null ? parseFloat(bet.ganancia) : null;
+  var imp=parseFloat(bet.importe)||0;
+  if(gan!==null && gan>0){
+    // already won — toggle back to pending
+    bet.ganancia='';
+  } else {
+    // apply prevista, or importe*cuota, or importe as fallback
+    var val=prevista!==''&&prevista!==null&&prevista!==undefined ? parseFloat(prevista) : null;
+    if(val===null||isNaN(val)){
+      var cuo=bet.cuota!==''&&bet.cuota!==null ? parseFloat(bet.cuota) : null;
+      val=(cuo&&!isNaN(cuo)) ? imp*cuo : imp;
+    }
+    bet.ganancia=parseFloat(val.toFixed(2));
+  }
+  apiPut(DATA, function(err){
+    if(err){ setSyncDot('error'); return; }
+    // Re-render the open player detail
+    var playerName=bet.player;
+    if(openPlayerIds[playerName]){
+      var cls=PLAYER_CSS[playerName];
+      var panel=document.getElementById('pdetail-'+cls);
+      if(panel) panel.innerHTML=buildPlayerDetail(playerName);
+    }
+    renderResumen();
+  });
+}
+
+function applyFail(pid, bid){
+  var bet=findBet(pid,bid);
+  if(!bet) return;
+  // If already marked as fail (ganancia===0), toggle back to pending
+  if(bet.ganancia===0||bet.ganancia==='0'||parseFloat(bet.ganancia)===0){
+    bet.ganancia='';
+  } else {
+    bet.ganancia=0;
+  }
+  apiPut(DATA, function(err){
+    if(err){ setSyncDot('error'); return; }
+    var playerName=bet.player;
+    if(openPlayerIds[playerName]){
+      var cls=PLAYER_CSS[playerName];
+      var panel=document.getElementById('pdetail-'+cls);
+      if(panel) panel.innerHTML=buildPlayerDetail(playerName);
+    }
+    renderResumen();
+  });
+}
+
+// ===================== START =====================
+window.addEventListener('DOMContentLoaded', function(){ init(); });
+</script>
+</body>
+</html>
