@@ -360,6 +360,14 @@ function showTab(tab){
 function renderAll(){ renderResumen(); renderRegistro(); }
 
 // ===================== STATS =====================
+function betStatus(b){
+  // Status is stored explicitly in b.status: 'won', 'failed', or '' / undefined = pending
+  var s=b.status;
+  if(s==='won') return 'won';
+  if(s==='failed') return 'failed';
+  return 'pending';
+}
+
 function playerStats(name){
   var apuestas=DATA.apuestas||{};
   var totalImporte=0, totalGanancia=0, nbets=0, nmatches=0;
@@ -368,18 +376,32 @@ function playerStats(name){
     if(bets.length) nmatches++;
     bets.forEach(function(b){
       nbets++;
-      totalImporte += parseFloat(b.importe)||0;
-      if(b.ganancia!==''&&b.ganancia!==null&&b.ganancia!==undefined&&b.ganancia!=='')
-        totalGanancia += parseFloat(b.ganancia)||0;
+      var st=betStatus(b);
+      var imp=parseFloat(b.importe)||0;
+      totalImporte += imp; // always shown as "apostado"
+      if(st==='won') totalGanancia += parseFloat(b.ganancia)||0;
+      // failed: contributes 0 to ganancia, imp already in totalImporte → balance -= imp
+      // pending: excluded from balance calc via separate balanceImporte
     });
   });
   return { importe:totalImporte, ganancia:totalGanancia, balance:totalGanancia-totalImporte, nbets:nbets, nmatches:nmatches };
 }
 
 function globalStats(){
-  var ti=0, tg=0, tb=0;
-  PARTICIPANTES.forEach(function(name){ var s=playerStats(name); ti+=s.importe; tg+=s.ganancia; tb+=s.nbets; });
-  return { importe:ti, ganancia:tg, balance:tg-ti, totalBets:tb };
+  var ti=0, tg=0, tb=0, twon=0, tfail=0, tpend=0;
+  PARTICIPANTES.forEach(function(name){
+    var s=playerStats(name); ti+=s.importe; tg+=s.ganancia; tb+=s.nbets;
+    PARTIDOS.forEach(function(p){
+      var bets=(DATA.apuestas&&DATA.apuestas[p.id]||[]).filter(function(b){ return b.player===name; });
+      bets.forEach(function(b){
+        var st=betStatus(b);
+        if(st==='won') twon++;
+        else if(st==='failed') tfail++;
+        else tpend++;
+      });
+    });
+  });
+  return { importe:ti, ganancia:tg, balance:tg-ti, totalBets:tb, won:twon, failed:tfail, pending:tpend };
 }
 
 // ===================== RESUMEN =====================
@@ -390,10 +412,14 @@ function renderResumen(){
 
   // Global cards
   html+='<div class="stat-row">';
-  html+='<div class="stat-card"><div class="sv sv-neu">'+gs.totalBets+'</div><div class="sl">Apuestas</div></div>';
+  html+='<div class="stat-card"><div class="sv sv-pos">'+gs.won+'</div><div class="sl">Ganadas</div></div>';
+  html+='<div class="stat-card"><div class="sv sv-neg">'+gs.failed+'</div><div class="sl">Falladas</div></div>';
+  html+='<div class="stat-card"><div class="sv sv-neu">'+gs.pending+'</div><div class="sl">Pendientes</div></div>';
+  html+='</div>';
+  html+='<div class="stat-row">';
   html+='<div class="stat-card"><div class="sv sv-neg">'+gs.importe.toFixed(2)+'€</div><div class="sl">Apostado</div></div>';
   var bc=gs.balance>0?'sv-pos':gs.balance<0?'sv-neg':'sv-neu';
-  html+='<div class="stat-card"><div class="sv '+bc+'">'+(gs.balance>=0?'+':'')+gs.balance.toFixed(2)+'€</div><div class="sl">Balance</div></div>';
+  html+='<div class="stat-card" style="-webkit-flex:2;flex:2;"><div class="sv '+bc+'">'+(gs.balance>=0?'+':'')+gs.balance.toFixed(2)+'€</div><div class="sl">Balance total (sin pendientes)</div></div>';
   html+='</div>';
 
   // Player cards
@@ -403,12 +429,29 @@ function renderResumen(){
     var bc2=s.balance>0?'sv-pos':s.balance<0?'sv-neg':'sv-neu';
     var isOpen=!!openPlayerIds[name];
 
+    // count bet statuses
+    var nWon=0, nFailed=0, nPending=0;
+    PARTIDOS.forEach(function(p){
+      var bets=(DATA.apuestas&&DATA.apuestas[p.id]||[]).filter(function(b){ return b.player===name; });
+      bets.forEach(function(b){
+        var st=betStatus(b);
+        if(st==='won') nWon++;
+        else if(st==='failed') nFailed++;
+        else nPending++;
+      });
+    });
+    var subParts=[];
+    if(nWon)     subParts.push('<span style="color:var(--green)">'+nWon+' ganada'+(nWon!==1?'s':'')+'</span>');
+    if(nFailed)  subParts.push('<span style="color:var(--red)">'+nFailed+' fallada'+(nFailed!==1?'s':'')+'</span>');
+    if(nPending) subParts.push(nPending+' pendiente'+(nPending!==1?'s':''));
+    var subStr=subParts.length ? subParts.join(' · ') : '0 apuestas';
+
     html+='<div class="player-card">';
     html+='<div class="player-head" onclick="togglePlayer(\''+escQ(name)+'\')">';
     html+='<div class="player-avatar '+cls+'-avatar">'+PLAYER_EMOJI[name]+'</div>';
     html+='<div class="player-info">';
     html+='<div class="player-name">'+esc(name)+'</div>';
-    html+='<div class="player-sub">'+s.nbets+' apuesta'+(s.nbets!==1?'s':'')+' · '+s.importe.toFixed(2)+'€ apostados</div>';
+    html+='<div class="player-sub">'+subStr+' · '+s.importe.toFixed(2)+'€ apostados</div>';
     html+='</div>';
     html+='<div class="player-balance '+cls+'-bal '+bc2+'">'+(s.balance>=0?'+':'')+s.balance.toFixed(2)+'€</div>';
     html+='<div class="player-chevron'+(isOpen?' open':'')+'" id="pchev-'+cls+'">▼</div>';
@@ -453,21 +496,22 @@ function buildPlayerDetail(name){
 
     bets.forEach(function(b){
       var imp=parseFloat(b.importe)||0;
+      var cuota=b.cuota!==''&&b.cuota!==null&&b.cuota!==undefined ? parseFloat(b.cuota) : null;
       var gan=b.ganancia!==''&&b.ganancia!==null&&b.ganancia!==undefined ? parseFloat(b.ganancia) : null;
       var bal=gan!==null ? gan-imp : null;
 
       var balHTML='';
-      if(bal===null) balHTML='<span class="detail-bal-neu">pendiente</span>';
-      else if(bal>=0) balHTML='<span class="detail-bal-pos">+'+bal.toFixed(2)+'€</span>';
-      else balHTML='<span class="detail-bal-neg">'+bal.toFixed(2)+'€</span>';
-
-      // calculate expected win from cuota × importe
-      var cuota=b.cuota!==''&&b.cuota!==null&&b.cuota!==undefined ? parseFloat(b.cuota) : null;
-      var prevista=(!isNaN(imp)&&cuota&&!isNaN(cuota)) ? imp*cuota : null;
+      var st=betStatus(b);
+      if(st==='pending') balHTML='<span class="detail-bal-neu">pendiente</span>';
+      else if(st==='failed') balHTML='<span class="detail-bal-neg">-'+imp.toFixed(2)+'€</span>';
+      else if(bal!==null&&bal>=0) balHTML='<span class="detail-bal-pos">+'+bal.toFixed(2)+'€</span>';
+      else if(bal!==null) balHTML='<span class="detail-bal-neg">'+bal.toFixed(2)+'€</span>';
+      else balHTML='<span class="detail-bal-neu">pendiente</span>';
 
       // button states
-      var isWin  = bal!==null && bal>0;
-      var isFail = bal!==null && gan===0;
+      var st=betStatus(b);
+      var isWin  = st==='won';
+      var isFail = st==='failed';
 
       html+='<div class="detail-row">';
       html+='<div class="detail-match-title">'+p.l.e+' '+esc(p.l.n)+' <span style="color:var(--txt3)">vs</span> '+esc(p.v.n)+' '+p.v.e+'</div>';
@@ -484,12 +528,11 @@ function buildPlayerDetail(name){
       html+=balHTML;
       html+='</div>';
 
-      // Action buttons — find the match pid for this bet
+      // find the match pid for this bet
       var _pid=p.id; var _bid=b.id;
-      var _prevista=prevista!==null ? prevista.toFixed(2) : '';
       html+='<div class="detail-actions">';
-      html+='<button class="btn-win'+(isWin?' applied':'')+'" onclick="applyWin(\''+escQ(_pid)+'\',\''+escQ(_bid)+'\',\''+escQ(_prevista)+'\')">';
-      html+=(isWin ? '✅ Ganada' : '🏆 Marcar ganada')+(prevista!==null&&!isWin?' &nbsp;<span style="opacity:.6;font-size:11px;">+'+prevista.toFixed(2)+'€ prev.</span>':'');
+      html+='<button class="btn-win'+(isWin?' applied':'')+'" onclick="applyWin(\''+escQ(_pid)+'\',\''+escQ(_bid)+'\')">';
+      html+=(isWin ? '✅ Ganada' : '🏆 Marcar ganada');
       html+='</button>';
       html+='<button class="btn-fail'+(isFail?' applied':'')+'" onclick="applyFail(\''+escQ(_pid)+'\',\''+escQ(_bid)+'\')">';
       html+=(isFail ? '❌ Fallada' : '❌ Marcar fallada');
@@ -638,7 +681,7 @@ function buildBetEntry(pid, b){
 function addBet(pid, player){
   if(!DATA.apuestas) DATA.apuestas={};
   if(!DATA.apuestas[pid]) DATA.apuestas[pid]=[];
-  DATA.apuestas[pid].push({ id:genId(), player:player, importe:'', cuota:'', ganancia:'', selecciones:'' });
+  DATA.apuestas[pid].push({ id:genId(), player:player, importe:'', cuota:'', ganancia:'', selecciones:'', status:'' });
   var body=document.getElementById('mb-'+pid);
   if(body) body.innerHTML=buildMatchBody(pid);
 }
@@ -692,32 +735,25 @@ function findBet(pid, bid){
   return found;
 }
 
-function applyWin(pid, bid, prevista){
+function applyWin(pid, bid){
   var bet=findBet(pid,bid);
   if(!bet) return;
-  // If already marked as win (ganancia > 0), toggle back to pending
-  var gan=bet.ganancia!==''&&bet.ganancia!==null ? parseFloat(bet.ganancia) : null;
-  var imp=parseFloat(bet.importe)||0;
-  if(gan!==null && gan>0){
-    // already won — toggle back to pending
-    bet.ganancia='';
+  if(bet.status==='won'){
+    // toggle back to pending
+    bet.status='';
   } else {
-    // apply prevista, or importe*cuota, or importe as fallback
-    var val=prevista!==''&&prevista!==null&&prevista!==undefined ? parseFloat(prevista) : null;
-    if(val===null||isNaN(val)){
-      var cuo=bet.cuota!==''&&bet.cuota!==null ? parseFloat(bet.cuota) : null;
-      val=(cuo&&!isNaN(cuo)) ? imp*cuo : imp;
+    if(bet.ganancia===''||bet.ganancia===null||bet.ganancia===undefined){
+      alert('Introduce primero la ganancia en el registro antes de marcar como ganada.');
+      return;
     }
-    bet.ganancia=parseFloat(val.toFixed(2));
+    bet.status='won';
   }
   apiPut(DATA, function(err){
     if(err){ setSyncDot('error'); return; }
-    // Re-render the open player detail
-    var playerName=bet.player;
-    if(openPlayerIds[playerName]){
-      var cls=PLAYER_CSS[playerName];
+    var cls=PLAYER_CSS[bet.player];
+    if(openPlayerIds[bet.player]){
       var panel=document.getElementById('pdetail-'+cls);
-      if(panel) panel.innerHTML=buildPlayerDetail(playerName);
+      if(panel) panel.innerHTML=buildPlayerDetail(bet.player);
     }
     renderResumen();
   });
@@ -726,19 +762,18 @@ function applyWin(pid, bid, prevista){
 function applyFail(pid, bid){
   var bet=findBet(pid,bid);
   if(!bet) return;
-  // If already marked as fail (ganancia===0), toggle back to pending
-  if(bet.ganancia===0||bet.ganancia==='0'||parseFloat(bet.ganancia)===0){
-    bet.ganancia='';
+  if(bet.status==='failed'){
+    // toggle back to pending
+    bet.status='';
   } else {
-    bet.ganancia=0;
+    bet.status='failed';
   }
   apiPut(DATA, function(err){
     if(err){ setSyncDot('error'); return; }
-    var playerName=bet.player;
-    if(openPlayerIds[playerName]){
-      var cls=PLAYER_CSS[playerName];
+    var cls=PLAYER_CSS[bet.player];
+    if(openPlayerIds[bet.player]){
       var panel=document.getElementById('pdetail-'+cls);
-      if(panel) panel.innerHTML=buildPlayerDetail(playerName);
+      if(panel) panel.innerHTML=buildPlayerDetail(bet.player);
     }
     renderResumen();
   });
