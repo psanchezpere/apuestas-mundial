@@ -376,12 +376,8 @@ function playerStats(name){
     if(bets.length) nmatches++;
     bets.forEach(function(b){
       nbets++;
-      var st=betStatus(b);
-      var imp=parseFloat(b.importe)||0;
-      totalImporte += imp; // always shown as "apostado"
-      if(st==='won') totalGanancia += parseFloat(b.ganancia)||0;
-      // failed: contributes 0 to ganancia, imp already in totalImporte → balance -= imp
-      // pending: excluded from balance calc via separate balanceImporte
+      totalImporte += parseFloat(b.importe)||0;
+      if(betStatus(b)==='won') totalGanancia += parseFloat(b.ganancia)||0;
     });
   });
   return { importe:totalImporte, ganancia:totalGanancia, balance:totalGanancia-totalImporte, nbets:nbets, nmatches:nmatches };
@@ -496,17 +492,22 @@ function buildPlayerDetail(name){
 
     bets.forEach(function(b){
       var imp=parseFloat(b.importe)||0;
-      var cuota=b.cuota!==''&&b.cuota!==null&&b.cuota!==undefined ? parseFloat(b.cuota) : null;
       var gan=b.ganancia!==''&&b.ganancia!==null&&b.ganancia!==undefined ? parseFloat(b.ganancia) : null;
-      var bal=gan!==null ? gan-imp : null;
+      var st=betStatus(b);
 
       var balHTML='';
-      var st=betStatus(b);
-      if(st==='pending') balHTML='<span class="detail-bal-neu">pendiente</span>';
-      else if(st==='failed') balHTML='<span class="detail-bal-neg">-'+imp.toFixed(2)+'€</span>';
-      else if(bal!==null&&bal>=0) balHTML='<span class="detail-bal-pos">+'+bal.toFixed(2)+'€</span>';
-      else if(bal!==null) balHTML='<span class="detail-bal-neg">'+bal.toFixed(2)+'€</span>';
-      else balHTML='<span class="detail-bal-neu">pendiente</span>';
+      if(st==='won'){
+        var net=(gan!==null ? gan : 0)-imp;
+        balHTML=net>=0
+          ? '<span class="detail-bal-pos">+'+net.toFixed(2)+'€</span>'
+          : '<span class="detail-bal-neg">'+net.toFixed(2)+'€</span>';
+      } else if(st==='failed'){
+        balHTML='<span class="detail-bal-neg">-'+imp.toFixed(2)+'€</span>';
+      } else {
+        balHTML='<span class="detail-bal-neu">pendiente</span>';
+      }
+
+      var cuota=b.cuota!==''&&b.cuota!==null&&b.cuota!==undefined ? parseFloat(b.cuota) : null;
 
       // button states
       var st=betStatus(b);
