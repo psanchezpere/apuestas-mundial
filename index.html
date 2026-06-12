@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>⚽ WC·2026·APUESTAS</title>
+<title>⚽ WC·2026·NOTAS</title>
 <style>
 :root {
   --bg: #070f1a;
@@ -18,7 +18,6 @@
   --gold: #f0b429;
   --green: #00e878;
   --red: #ff4d6a;
-  --purple: #c77dff;
   --txt: #e8f4f0;
   --txt2: #7a9e96;
   --txt3: #3a5e58;
@@ -49,9 +48,9 @@ body {
 }
 #hdr-logo { font-size: 15px; font-weight: 700; color: var(--cyan); letter-spacing: .04em; -webkit-flex:1; flex:1; }
 #sync-dot { font-size: 18px; transition: color .3s; }
-#sync-dot.ok     { color: var(--cyan); }
-#sync-dot.loading{ color: var(--gold); }
-#sync-dot.error  { color: var(--red);  }
+#sync-dot.ok      { color: var(--cyan); }
+#sync-dot.loading { color: var(--gold); }
+#sync-dot.error   { color: var(--red);  }
 
 /* NAV */
 #nav {
@@ -92,63 +91,10 @@ body {
 .screen.active { display: block; }
 
 /* STAT CARDS */
-.stat-row { display: -webkit-flex; display: flex; gap: 8px; margin-bottom: 14px; }
-.stat-card { -webkit-flex:1; flex:1; background: var(--surf); border: 1px solid var(--brd); border-radius: 10px; padding: 11px 12px; }
-.stat-card .sv { font-size: 19px; font-weight: 700; }
+.stat-row { display: -webkit-flex; display: flex; gap: 8px; margin-bottom: 16px; }
+.stat-card { -webkit-flex:1; flex:1; background: var(--surf); border: 1px solid var(--brd); border-radius: 10px; padding: 12px 14px; }
+.stat-card .sv { font-size: 22px; font-weight: 700; color: var(--cyan); }
 .stat-card .sl { font-size: 10px; color: var(--txt2); letter-spacing: .04em; text-transform: uppercase; margin-top: 2px; }
-.sv-pos { color: var(--green); }
-.sv-neg { color: var(--red); }
-.sv-neu { color: var(--cyan); }
-
-/* PLAYER CARDS */
-.player-card { background: var(--surf); border: 1px solid var(--brd); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
-.player-head { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 13px 14px; gap: 12px; cursor: pointer; }
-.player-avatar { width: 36px; height: 36px; border-radius: 50%; display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; -webkit-justify-content:center; justify-content:center; font-size: 15px; font-weight: 700; flex-shrink: 0; border: 2px solid; }
-.player-info { -webkit-flex:1; flex:1; }
-.player-name { font-size: 16px; font-weight: 700; color: var(--txt); }
-.player-sub { font-size: 11px; color: var(--txt2); margin-top: 1px; }
-.player-balance { font-size: 22px; font-weight: 700; text-align: right; flex-shrink: 0; }
-.player-chevron { color: var(--txt3); font-size: 13px; transition: transform .3s; margin-left: 6px; flex-shrink: 0; }
-.player-chevron.open { transform: rotate(180deg); }
-.player-detail { display: none; border-top: 1px solid var(--brd); }
-.player-detail.open { display: block; }
-
-/* DETAIL ROWS */
-.detail-jornada-sep { font-size: 10px; font-weight: 700; color: var(--txt3); letter-spacing: .07em; padding: 7px 14px 4px; background: var(--surf2); }
-.detail-row { padding: 9px 14px; border-bottom: 1px solid var(--brd); }
-.detail-row:last-child { border-bottom: none; }
-.detail-match-title { font-size: 13px; font-weight: 600; color: var(--txt); margin-bottom: 4px; }
-.detail-meta { display: -webkit-flex; display: flex; gap: 14px; -webkit-flex-wrap: wrap; flex-wrap: wrap; -webkit-align-items: center; align-items: center; }
-.detail-sel { font-size: 12px; color: var(--txt2); -webkit-flex:1; flex:1; min-width: 120px; }
-.detail-sel em { color: var(--txt); font-style: normal; }
-.detail-cuota { font-size: 11px; color: var(--txt2); white-space: nowrap; }
-.detail-cuota span { color: var(--gold); font-weight: 700; }
-.detail-importe { font-size: 11px; color: var(--txt2); white-space: nowrap; }
-.detail-bal-pos { color: var(--green); font-weight: 700; font-size: 13px; white-space: nowrap; }
-.detail-bal-neg { color: var(--red); font-weight: 700; font-size: 13px; white-space: nowrap; }
-.detail-bal-neu { color: var(--txt3); font-style: italic; font-size: 12px; white-space: nowrap; }
-.detail-empty { padding: 16px 14px; color: var(--txt3); font-size: 12px; font-style: italic; }
-.detail-actions { display: -webkit-flex; display: flex; gap: 6px; margin-top: 8px; }
-.btn-win {
-  -webkit-flex:1; flex:1;
-  background: rgba(0,232,120,.12); border: 1px solid rgba(0,232,120,.35);
-  color: var(--green); border-radius: 7px;
-  padding: 7px 6px; font-size: 12px; font-weight: 700;
-  cursor: pointer; min-height: 36px; letter-spacing: .02em;
-  transition: background .15s;
-}
-.btn-win:active { background: rgba(0,232,120,.25); }
-.btn-win.applied { background: rgba(0,232,120,.22); border-color: var(--green); }
-.btn-fail {
-  -webkit-flex:1; flex:1;
-  background: rgba(255,77,106,.10); border: 1px solid rgba(255,77,106,.30);
-  color: var(--red); border-radius: 7px;
-  padding: 7px 6px; font-size: 12px; font-weight: 700;
-  cursor: pointer; min-height: 36px; letter-spacing: .02em;
-  transition: background .15s;
-}
-.btn-fail:active { background: rgba(255,77,106,.22); }
-.btn-fail.applied { background: rgba(255,77,106,.20); border-color: var(--red); }
 
 /* SECTION SEP */
 .section-sep { font-size: 11px; font-weight: 700; color: var(--txt2); letter-spacing: .08em; padding: 12px 0 6px; border-bottom: 1px solid var(--brd); margin-bottom: 8px; }
@@ -159,92 +105,141 @@ body {
 .pill { background: var(--surf2); border: 1px solid var(--brd); color: var(--txt2); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0; min-height: 32px; display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; transition: background .15s, color .15s; }
 .pill.active { background: var(--cyan25); color: var(--cyan); border-color: var(--cyan); }
 
-/* MATCH CARDS */
-.match-card { background: var(--surf); border: 1px solid var(--brd); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
-.match-head { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 11px 14px; gap: 10px; cursor: pointer; }
+/* MATCH CARD */
+.match-card {
+  background: var(--surf); border: 1px solid var(--brd);
+  border-radius: 10px; margin-bottom: 10px; overflow: hidden;
+}
+.match-head {
+  display: -webkit-flex; display: flex;
+  -webkit-align-items: center; align-items: center;
+  padding: 12px 14px; gap: 10px; cursor: pointer;
+}
 .badge { background: var(--cyan12); color: var(--cyan); border: 1px solid var(--brd2); border-radius: 6px; padding: 2px 7px; font-size: 10px; font-weight: 700; letter-spacing: .04em; flex-shrink: 0; }
 .match-teams { -webkit-flex:1; flex:1; font-size: 13px; color: var(--txt); }
-.match-bet-count { font-size: 11px; color: var(--txt2); white-space: nowrap; }
-.match-chevron { color: var(--txt3); font-size: 12px; transition: transform .3s; flex-shrink: 0; }
+.match-date { font-size: 11px; color: var(--txt3); white-space: nowrap; }
+.match-note-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.match-note-dot.has-note { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+.match-note-dot.no-note  { background: var(--txt3); }
+.match-chevron { color: var(--txt3); font-size: 12px; transition: transform .3s; flex-shrink: 0; margin-left: 2px; }
 .match-chevron.open { transform: rotate(180deg); }
+
+/* MATCH BODY */
 .match-body { display: none; border-top: 1px solid var(--brd); padding: 12px 14px; }
 .match-body.open { display: block; }
 
-/* BET ENTRY */
-.bet-entry { background: var(--surf2); border: 1px solid var(--brd); border-radius: 8px; padding: 11px 12px; margin-bottom: 10px; }
-.bet-entry-head { display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; gap: 8px; margin-bottom: 10px; }
-.bet-player-tag { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; letter-spacing: .03em; }
-.bet-del { margin-left: auto; background: rgba(255,77,106,.1); border: 1px solid rgba(255,77,106,.25); color: var(--red); border-radius: 6px; padding: 3px 10px; font-size: 12px; cursor: pointer; min-height: 30px; }
+/* TEXTAREA DE NOTAS */
+.nota-textarea {
+  width: 100%; min-height: 120px;
+  background: var(--surf2); border: 1px solid var(--brd2);
+  color: var(--txt); border-radius: 8px;
+  padding: 10px 12px; font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6; resize: vertical;
+  outline: none; -webkit-appearance: none;
+  transition: border-color .2s;
+}
+.nota-textarea:focus { border-color: var(--cyan); background: rgba(0,255,200,.04); }
+.nota-textarea::placeholder { color: var(--txt3); }
 
-/* BET FIELDS GRID */
-.bet-grid { display: -webkit-flex; display: flex; gap: 8px; margin-bottom: 8px; -webkit-flex-wrap: wrap; flex-wrap: wrap; }
-.bet-field { display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; gap: 4px; }
-.bet-field label { font-size: 10px; color: var(--txt2); letter-spacing: .04em; text-transform: uppercase; }
-.bet-input { background: var(--surf); border: 1px solid var(--brd2); color: var(--txt); border-radius: 7px; padding: 8px 10px; font-size: 16px; outline: none; -webkit-appearance: none; width: 100%; }
-.bet-input:focus { border-color: var(--cyan); }
-.bf-num  { width: 96px; }
-.bf-sel  { -webkit-flex:1; flex:1; min-width: 160px; resize: vertical; min-height: 60px; font-family: inherit; }
-
-/* ganancia color feedback */
-.bet-input.gan-ok  { border-color: var(--green); color: var(--green); }
-.bet-input.gan-ko  { border-color: var(--red);   color: var(--red);   }
-
-.bet-save-row { display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; gap: 10px; margin-top: 4px; }
-.btn-save { background: var(--cyan25); border: 1px solid var(--cyan); color: var(--cyan); border-radius: 8px; padding: 8px 20px; font-size: 14px; font-weight: 700; cursor: pointer; min-height: 40px; }
+.nota-actions {
+  display: -webkit-flex; display: flex;
+  -webkit-align-items: center; align-items: center;
+  gap: 10px; margin-top: 10px;
+}
+.btn-save {
+  background: var(--cyan25); border: 1px solid var(--cyan);
+  color: var(--cyan); border-radius: 8px;
+  padding: 8px 22px; font-size: 14px; font-weight: 700;
+  cursor: pointer; min-height: 40px;
+  transition: background .15s;
+}
 .btn-save:active { background: var(--cyan40); }
+.btn-clear {
+  background: rgba(255,77,106,.08); border: 1px solid rgba(255,77,106,.25);
+  color: var(--red); border-radius: 8px;
+  padding: 8px 14px; font-size: 13px; font-weight: 600;
+  cursor: pointer; min-height: 40px;
+}
 .save-msg { font-size: 11px; color: var(--cyan); font-weight: 600; letter-spacing: .03em; display: none; }
 
-/* ADD BET */
-.btn-add-bet { background: var(--cyan12); border: 1px dashed var(--brd2); color: var(--txt2); border-radius: 8px; padding: 9px 0; font-size: 12px; font-weight: 600; cursor: pointer; display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; -webkit-justify-content:center; justify-content:center; gap: 5px; min-height: 40px; -webkit-flex:1; flex:1; transition: background .15s; }
-.btn-add-bet:active { background: var(--cyan25); }
+/* RESUMEN — lista de notas */
+.nota-resumen-card {
+  background: var(--surf); border: 1px solid var(--brd);
+  border-radius: 10px; margin-bottom: 8px; padding: 12px 14px;
+  cursor: pointer;
+}
+.nota-resumen-head {
+  display: -webkit-flex; display: flex;
+  -webkit-align-items: center; align-items: center;
+  gap: 10px; margin-bottom: 6px;
+}
+.nota-resumen-match { font-size: 13px; font-weight: 600; color: var(--txt); -webkit-flex:1; flex:1; }
+.nota-resumen-date { font-size: 11px; color: var(--txt3); white-space: nowrap; }
+.nota-resumen-preview {
+  font-size: 12px; color: var(--txt2);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; line-height: 1.5;
+}
+.empty-msg { text-align: center; padding: 50px 20px; color: var(--txt2); font-size: 14px; font-weight: 600; letter-spacing: .04em; }
 
-/* PLAYER COLORS */
-.angel-avatar { background: rgba(0,255,200,.12); border-color: var(--cyan); color: var(--cyan); }
-.pedro-avatar { background: rgba(240,180,41,.12); border-color: var(--gold); color: var(--gold); }
-.tuli-avatar  { background: rgba(199,125,255,.12); border-color: var(--purple); color: var(--purple); }
-.angel-tag { background: rgba(0,255,200,.15); color: var(--cyan); border: 1px solid var(--brd2); }
-.pedro-tag { background: rgba(240,180,41,.15); color: var(--gold); border: 1px solid rgba(240,180,41,.35); }
-.tuli-tag  { background: rgba(199,125,255,.15); color: var(--purple); border: 1px solid rgba(199,125,255,.35); }
-.angel-bal { color: var(--cyan); }
-.pedro-bal { color: var(--gold); }
-.tuli-bal  { color: var(--purple); }
+/* BUSQUEDA */
+.search-wrap { position: relative; margin-bottom: 14px; }
+.search-input {
+  width: 100%; background: var(--surf2); border: 1px solid var(--brd2);
+  color: var(--txt); border-radius: 10px;
+  padding: 11px 16px 11px 40px; font-size: 16px;
+  outline: none; -webkit-appearance: none;
+  transition: border-color .2s;
+}
+.search-input:focus { border-color: var(--cyan); }
+.search-input::placeholder { color: var(--txt3); }
+.search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 16px; pointer-events: none; }
+.team-pills { display: -webkit-flex; display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; margin-bottom: 14px; scrollbar-width: none; }
+.team-pills::-webkit-scrollbar { display: none; }
+.team-pill { background: var(--surf2); border: 1px solid var(--brd); color: var(--txt2); border-radius: 20px; padding: 5px 11px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0; min-height: 32px; display: -webkit-flex; display: flex; -webkit-align-items:center; align-items:center; gap: 4px; transition: background .15s, color .15s; }
+.team-pill.active { background: var(--cyan25); color: var(--cyan); border-color: var(--cyan); }
+.team-result-card { background: var(--surf); border: 1px solid var(--brd); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+.team-result-head { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 10px 14px; gap: 10px; border-bottom: 1px solid var(--brd); background: var(--surf2); }
+.team-result-rival { font-size: 13px; color: var(--txt); -webkit-flex:1; flex:1; font-weight: 600; }
+.team-result-nota { padding: 12px 14px; font-size: 13px; color: var(--txt2); line-height: 1.65; white-space: pre-wrap; word-break: break-word; }
+.team-result-goto { font-size: 11px; color: var(--cyan); font-weight: 600; cursor: pointer; white-space: nowrap; text-decoration: underline; }
 </style>
 </head>
 <body>
 
 <div id="loader">
-  <div style="font-size:22px;font-weight:700;color:#00ffc8;letter-spacing:.06em;">⚽ WC·2026·APUESTAS</div>
+  <div style="font-size:22px;font-weight:700;color:#00ffc8;letter-spacing:.06em;">⚽ WC·2026·NOTAS</div>
   <div class="spinner"></div>
   <div style="color:#7a9e96;font-size:13px;letter-spacing:.06em;">Cargando datos…</div>
 </div>
 
 <div id="hdr">
-  <div id="hdr-logo">⚽ WC·2026·APUESTAS</div>
+  <div id="hdr-logo">⚽ WC·2026·NOTAS</div>
   <span id="sync-dot" class="ok">●</span>
 </div>
 
 <div id="nav">
   <button class="nav-btn active" id="nav-resumen" onclick="showTab('resumen')">
-    <span class="ico">📊</span>RESUMEN
+    <span class="ico">📋</span>RESUMEN
   </button>
-  <button class="nav-btn" id="nav-registro" onclick="showTab('registro')">
-    <span class="ico">✏️</span>REGISTRO
+  <button class="nav-btn" id="nav-notas" onclick="showTab('notas')">
+    <span class="ico">✏️</span>NOTAS
+  </button>
+  <button class="nav-btn" id="nav-busqueda" onclick="showTab('busqueda')">
+    <span class="ico">🔍</span>EQUIPOS
   </button>
 </div>
 
 <div id="screen-resumen" class="screen active"></div>
-<div id="screen-registro" class="screen"></div>
+<div id="screen-notas" class="screen"></div>
+<div id="screen-busqueda" class="screen"></div>
 
 <script>
 // ===================== CONFIG =====================
-var BIN_ID = '6a2987afda38895dfea789a1';
-var X_KEY  = '$2a$10$GIQhqjikc8jJPqHZxAYxuO20.FtSI3Ng5jOpARqHWMaO9/UcJmMSi';
+var BIN_ID  = '6a2987afda38895dfea789a1';
+var X_KEY   = '$2a$10$GIQhqjikc8jJPqHZxAYxuO20.FtSI3Ng5jOpARqHWMaO9/UcJmMSi';
 var BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
-
-// ===================== PARTICIPANTES =====================
-var PARTICIPANTES = ['Angel', 'Pedro', 'Tuli'];
-var PLAYER_CSS    = { Angel: 'angel', Pedro: 'pedro', Tuli: 'tuli' };
-var PLAYER_EMOJI  = { Angel: '😇', Pedro: '🎯', Tuli: '🦁' };
 
 // ===================== PARTIDOS =====================
 var GROUPS_DATA = {
@@ -267,7 +262,7 @@ var JORNADA_DATES = {
   2:{A:'18 Jun',B:'18 Jun',C:'19 Jun',D:'19 Jun',E:'20 Jun',F:'20 Jun',G:'21 Jun',H:'21 Jun',I:'22 Jun',J:'22 Jun',K:'23 Jun',L:'23 Jun'},
   3:{A:'26 Jun',B:'26 Jun',C:'26 Jun',D:'27 Jun',E:'27 Jun',F:'27 Jun',G:'26 Jun',H:'26 Jun',I:'27 Jun',J:'27 Jun',K:'26 Jun',L:'27 Jun'}
 };
-var FECHA_J = {1:'11–17 Jun',2:'18–23 Jun',3:'24–27 Jun'};
+var FECHA_J = {1:'11–17 Jun', 2:'18–23 Jun', 3:'24–27 Jun'};
 
 var PARTIDOS = [];
 (function(){
@@ -276,41 +271,32 @@ var PARTIDOS = [];
     var ts=GROUPS_DATA[g], gl=g.toLowerCase();
     for(var j=0;j<3;j++){
       pat[j].forEach(function(pair,pi){
-        PARTIDOS.push({id:gl+(j*2+pi+1),g:g,j:j+1,f:JORNADA_DATES[j+1][g],l:ts[pair[0]],v:ts[pair[1]]});
+        PARTIDOS.push({id:gl+(j*2+pi+1), g:g, j:j+1, f:JORNADA_DATES[j+1][g], l:ts[pair[0]], v:ts[pair[1]]});
       });
     }
   });
 })();
 
 // ===================== STATE =====================
-var DATA = { apuestas: {} };
-var regFilter = 'TODOS';
-var regOpenMatchId = null;
-var openPlayerIds = {};
+// DATA structure: { notas: { "a1": "texto...", "b3": "texto..." } }
+var DATA = { notas: {} };
+var notasFilter = 'TODOS';
+var notasOpenId = null;
 
 // ===================== UTILS =====================
 function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function escQ(s){ if(!s) return ''; return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
 function setSyncDot(st){ var d=document.getElementById('sync-dot'); if(d) d.className=st; }
-function genId(){ return 'b'+Date.now()+'_'+Math.floor(Math.random()*9999); }
-
-function fmtBal(v){
-  if(v===null||v===undefined) return null;
-  var n=parseFloat(v);
-  if(isNaN(n)) return null;
-  return (n>=0?'+':'')+n.toFixed(2)+'€';
-}
 
 // ===================== API =====================
 function apiGet(cb){
   setSyncDot('loading');
   var xhr=new XMLHttpRequest();
-  xhr.open('GET',BIN_URL+'/latest',true);
-  xhr.setRequestHeader('X-Master-Key',X_KEY);
-  xhr.setRequestHeader('X-Bin-Meta','false');
+  xhr.open('GET', BIN_URL+'/latest', true);
+  xhr.setRequestHeader('X-Master-Key', X_KEY);
+  xhr.setRequestHeader('X-Bin-Meta', 'false');
   xhr.onload=function(){
     if(xhr.status===200){
-      try{ setSyncDot('ok'); cb(null,JSON.parse(xhr.responseText)); }
+      try{ setSyncDot('ok'); cb(null, JSON.parse(xhr.responseText)); }
       catch(e){ setSyncDot('error'); cb(e); }
     } else { setSyncDot('error'); cb(new Error('HTTP '+xhr.status)); }
   };
@@ -318,12 +304,12 @@ function apiGet(cb){
   xhr.send();
 }
 
-function apiPut(data,cb){
+function apiPut(data, cb){
   setSyncDot('loading');
   var xhr=new XMLHttpRequest();
-  xhr.open('PUT',BIN_URL,true);
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-Master-Key',X_KEY);
+  xhr.open('PUT', BIN_URL, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('X-Master-Key', X_KEY);
   xhr.onload=function(){
     if(xhr.status===200){ setSyncDot('ok'); if(cb) cb(null); }
     else{ setSyncDot('error'); if(cb) cb(new Error('HTTP '+xhr.status)); }
@@ -334,229 +320,98 @@ function apiPut(data,cb){
 
 // ===================== INIT =====================
 function init(){
-  if(BIN_ID==='TU_BIN_ID'){ hideLoader(); renderAll(); return; }
-  apiGet(function(err,d){
-    if(err){ hideLoader(); renderAll(); return; }
-    DATA = (!d||!d.apuestas) ? {apuestas:{}} : d;
+  apiGet(function(err, d){
+    if(err || !d || !d.notas){ DATA={notas:{}}; hideLoader(); renderAll(); return; }
+    DATA=d;
     hideLoader(); renderAll();
   });
 }
 function hideLoader(){
   var l=document.getElementById('loader');
   l.style.opacity='0';
-  setTimeout(function(){ l.style.display='none'; },400);
+  setTimeout(function(){ l.style.display='none'; }, 400);
 }
 
 // ===================== TABS =====================
 function showTab(tab){
-  ['resumen','registro'].forEach(function(t){
+  ['resumen','notas','busqueda'].forEach(function(t){
     document.getElementById('screen-'+t).className='screen'+(t===tab?' active':'');
     document.getElementById('nav-'+t).className='nav-btn'+(t===tab?' active':'');
   });
   window.scrollTo(0,0);
-  if(tab==='resumen') renderResumen();
-  if(tab==='registro') renderRegistro();
+  if(tab==='resumen')  renderResumen();
+  if(tab==='notas')    renderNotas();
+  if(tab==='busqueda') renderBusqueda();
 }
-function renderAll(){ renderResumen(); renderRegistro(); }
-
-// ===================== STATS =====================
-function betStatus(b){
-  // Status is stored explicitly in b.status: 'won', 'failed', or '' / undefined = pending
-  var s=b.status;
-  if(s==='won') return 'won';
-  if(s==='failed') return 'failed';
-  return 'pending';
-}
-
-function playerStats(name){
-  var apuestas=DATA.apuestas||{};
-  var totalImporte=0, totalGanancia=0, nbets=0, nmatches=0;
-  PARTIDOS.forEach(function(p){
-    var bets=(apuestas[p.id]||[]).filter(function(b){ return b.player===name; });
-    if(bets.length) nmatches++;
-    bets.forEach(function(b){
-      nbets++;
-      totalImporte += parseFloat(b.importe)||0;
-      if(betStatus(b)==='won') totalGanancia += parseFloat(b.ganancia)||0;
-    });
-  });
-  return { importe:totalImporte, ganancia:totalGanancia, balance:totalGanancia-totalImporte, nbets:nbets, nmatches:nmatches };
-}
-
-function globalStats(){
-  var ti=0, tg=0, tb=0, twon=0, tfail=0, tpend=0;
-  PARTICIPANTES.forEach(function(name){
-    var s=playerStats(name); ti+=s.importe; tg+=s.ganancia; tb+=s.nbets;
-    PARTIDOS.forEach(function(p){
-      var bets=(DATA.apuestas&&DATA.apuestas[p.id]||[]).filter(function(b){ return b.player===name; });
-      bets.forEach(function(b){
-        var st=betStatus(b);
-        if(st==='won') twon++;
-        else if(st==='failed') tfail++;
-        else tpend++;
-      });
-    });
-  });
-  return { importe:ti, ganancia:tg, balance:tg-ti, totalBets:tb, won:twon, failed:tfail, pending:tpend };
-}
+function renderAll(){ renderResumen(); renderNotas(); }
 
 // ===================== RESUMEN =====================
 function renderResumen(){
   var el=document.getElementById('screen-resumen');
-  var gs=globalStats();
+  var notas=DATA.notas||{};
+  var totalNotas=0;
+  PARTIDOS.forEach(function(p){ if(notas[p.id]&&notas[p.id].trim()) totalNotas++; });
+
   var html='';
 
-  // Global cards
+  // Stat cards
   html+='<div class="stat-row">';
-  html+='<div class="stat-card"><div class="sv sv-pos">'+gs.won+'</div><div class="sl">Ganadas</div></div>';
-  html+='<div class="stat-card"><div class="sv sv-neg">'+gs.failed+'</div><div class="sl">Falladas</div></div>';
-  html+='<div class="stat-card"><div class="sv sv-neu">'+gs.pending+'</div><div class="sl">Pendientes</div></div>';
-  html+='</div>';
-  html+='<div class="stat-row">';
-  html+='<div class="stat-card"><div class="sv sv-neg">'+gs.importe.toFixed(2)+'€</div><div class="sl">Apostado</div></div>';
-  var bc=gs.balance>0?'sv-pos':gs.balance<0?'sv-neg':'sv-neu';
-  html+='<div class="stat-card" style="-webkit-flex:2;flex:2;"><div class="sv '+bc+'">'+(gs.balance>=0?'+':'')+gs.balance.toFixed(2)+'€</div><div class="sl">Balance total (sin pendientes)</div></div>';
+  html+='<div class="stat-card"><div class="sv">'+totalNotas+'</div><div class="sl">Partidos con notas</div></div>';
+  html+='<div class="stat-card"><div class="sv">'+PARTIDOS.length+'</div><div class="sl">Total partidos</div></div>';
   html+='</div>';
 
-  // Player cards
-  PARTICIPANTES.forEach(function(name){
-    var s=playerStats(name);
-    var cls=PLAYER_CSS[name];
-    var bc2=s.balance>0?'sv-pos':s.balance<0?'sv-neg':'sv-neu';
-    var isOpen=!!openPlayerIds[name];
+  // Notas existentes ordenadas J1→J3 A→L
+  var conNota=[];
+  var ordered=[];
+  [1,2,3].forEach(function(j){ GRP_KEYS.forEach(function(g){ PARTIDOS.forEach(function(p){ if(p.j===j&&p.g===g) ordered.push(p); }); }); });
+  ordered.forEach(function(p){ if(notas[p.id]&&notas[p.id].trim()) conNota.push(p); });
 
-    // count bet statuses
-    var nWon=0, nFailed=0, nPending=0;
-    PARTIDOS.forEach(function(p){
-      var bets=(DATA.apuestas&&DATA.apuestas[p.id]||[]).filter(function(b){ return b.player===name; });
-      bets.forEach(function(b){
-        var st=betStatus(b);
-        if(st==='won') nWon++;
-        else if(st==='failed') nFailed++;
-        else nPending++;
-      });
+  if(!conNota.length){
+    html+='<div class="empty-msg">Todavía no hay notas.<br><span style="font-size:12px;font-weight:400;color:var(--txt3)">Ve a ✏️ NOTAS para empezar.</span></div>';
+  } else {
+    var currentJ=0;
+    conNota.forEach(function(p){
+      if(p.j!==currentJ){
+        currentJ=p.j;
+        html+='<div class="section-sep">▸ JORNADA '+p.j+' &nbsp;·&nbsp; '+FECHA_J[p.j]+'</div>';
+      }
+      var texto=notas[p.id]||'';
+      html+='<div class="nota-resumen-card" onclick="irANota(\''+p.id+'\')">';
+      html+='<div class="nota-resumen-head">';
+      html+='<div class="badge">G'+p.g+' J'+p.j+'</div>';
+      html+='<div class="nota-resumen-match">'+p.l.e+' '+esc(p.l.n)+' <span style="color:var(--txt3)">vs</span> '+esc(p.v.n)+' '+p.v.e+'</div>';
+      html+='<div class="nota-resumen-date">'+p.f+'</div>';
+      html+='</div>';
+      html+='<div class="nota-resumen-preview">'+esc(texto)+'</div>';
+      html+='</div>';
     });
-    var subParts=[];
-    if(nWon)     subParts.push('<span style="color:var(--green)">'+nWon+' ganada'+(nWon!==1?'s':'')+'</span>');
-    if(nFailed)  subParts.push('<span style="color:var(--red)">'+nFailed+' fallada'+(nFailed!==1?'s':'')+'</span>');
-    if(nPending) subParts.push(nPending+' pendiente'+(nPending!==1?'s':''));
-    var subStr=subParts.length ? subParts.join(' · ') : '0 apuestas';
-
-    html+='<div class="player-card">';
-    html+='<div class="player-head" onclick="togglePlayer(\''+escQ(name)+'\')">';
-    html+='<div class="player-avatar '+cls+'-avatar">'+PLAYER_EMOJI[name]+'</div>';
-    html+='<div class="player-info">';
-    html+='<div class="player-name">'+esc(name)+'</div>';
-    html+='<div class="player-sub">'+subStr+' · '+s.importe.toFixed(2)+'€ apostados</div>';
-    html+='</div>';
-    html+='<div class="player-balance '+cls+'-bal '+bc2+'">'+(s.balance>=0?'+':'')+s.balance.toFixed(2)+'€</div>';
-    html+='<div class="player-chevron'+(isOpen?' open':'')+'" id="pchev-'+cls+'">▼</div>';
-    html+='</div>';
-    html+='<div class="player-detail'+(isOpen?' open':'')+'" id="pdetail-'+cls+'">';
-    if(isOpen) html+=buildPlayerDetail(name);
-    html+='</div>';
-    html+='</div>';
-  });
+  }
 
   el.innerHTML=html;
 }
 
-function togglePlayer(name){
-  var cls=PLAYER_CSS[name];
-  var panel=document.getElementById('pdetail-'+cls);
-  var chev=document.getElementById('pchev-'+cls);
-  if(!panel||!chev) return;
-  if(openPlayerIds[name]){
-    openPlayerIds[name]=false;
-    panel.className='player-detail'; panel.innerHTML='';
-    chev.className='player-chevron';
-  } else {
-    openPlayerIds[name]=true;
-    panel.innerHTML=buildPlayerDetail(name);
-    panel.className='player-detail open';
-    chev.className='player-chevron open';
-  }
+function irANota(pid){
+  notasFilter='TODOS';
+  notasOpenId=pid;
+  showTab('notas');
+  // Scroll to the card after render
+  setTimeout(function(){
+    var card=document.getElementById('mc-'+pid);
+    if(card) card.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 100);
 }
 
-function buildPlayerDetail(name){
-  var apuestas=DATA.apuestas||{};
-  var html=''; var hasAny=false; var currentJ=0;
-  var ordered=[];
-  [1,2,3].forEach(function(j){ GRP_KEYS.forEach(function(g){ PARTIDOS.forEach(function(p){ if(p.j===j&&p.g===g) ordered.push(p); }); }); });
-
-  ordered.forEach(function(p){
-    var bets=(apuestas[p.id]||[]).filter(function(b){ return b.player===name; });
-    if(!bets.length) return;
-    hasAny=true;
-    if(p.j!==currentJ){ currentJ=p.j; html+='<div class="detail-jornada-sep">▸ JORNADA '+p.j+'</div>'; }
-
-    bets.forEach(function(b){
-      var imp=parseFloat(b.importe)||0;
-      var gan=b.ganancia!==''&&b.ganancia!==null&&b.ganancia!==undefined ? parseFloat(b.ganancia) : null;
-      var st=betStatus(b);
-
-      var balHTML='';
-      if(st==='won'){
-        var net=(gan!==null ? gan : 0)-imp;
-        balHTML=net>=0
-          ? '<span class="detail-bal-pos">+'+net.toFixed(2)+'€</span>'
-          : '<span class="detail-bal-neg">'+net.toFixed(2)+'€</span>';
-      } else if(st==='failed'){
-        balHTML='<span class="detail-bal-neg">-'+imp.toFixed(2)+'€</span>';
-      } else {
-        balHTML='<span class="detail-bal-neu">pendiente</span>';
-      }
-
-      var cuota=b.cuota!==''&&b.cuota!==null&&b.cuota!==undefined ? parseFloat(b.cuota) : null;
-
-      // button states
-      var st=betStatus(b);
-      var isWin  = st==='won';
-      var isFail = st==='failed';
-
-      html+='<div class="detail-row">';
-      html+='<div class="detail-match-title">'+p.l.e+' '+esc(p.l.n)+' <span style="color:var(--txt3)">vs</span> '+esc(p.v.n)+' '+p.v.e+'</div>';
-      html+='<div class="detail-meta">';
-      if(b.selecciones&&b.selecciones.trim()){
-        html+='<div class="detail-sel"><em>'+esc(b.selecciones)+'</em></div>';
-      } else {
-        html+='<div class="detail-sel" style="font-style:italic;color:var(--txt3)">sin descripción</div>';
-      }
-      if(cuota&&!isNaN(cuota)){
-        html+='<div class="detail-cuota">Cuota <span>'+esc(b.cuota)+'</span></div>';
-      }
-      html+='<div class="detail-importe">'+imp.toFixed(2)+'€ apostados</div>';
-      html+=balHTML;
-      html+='</div>';
-
-      // find the match pid for this bet
-      var _pid=p.id; var _bid=b.id;
-      html+='<div class="detail-actions">';
-      html+='<button class="btn-win'+(isWin?' applied':'')+'" onclick="applyWin(\''+escQ(_pid)+'\',\''+escQ(_bid)+'\')">';
-      html+=(isWin ? '✅ Ganada' : '🏆 Marcar ganada');
-      html+='</button>';
-      html+='<button class="btn-fail'+(isFail?' applied':'')+'" onclick="applyFail(\''+escQ(_pid)+'\',\''+escQ(_bid)+'\')">';
-      html+=(isFail ? '❌ Fallada' : '❌ Marcar fallada');
-      html+='</button>';
-      html+='</div>';
-      html+='</div>';
-    });
-  });
-
-  if(!hasAny) html='<div class="detail-empty">Sin apuestas registradas aún.</div>';
-  return html;
-}
-
-// ===================== REGISTRO =====================
-function renderRegistro(){
-  var el=document.getElementById('screen-registro');
-  var apuestas=DATA.apuestas||{};
+// ===================== NOTAS =====================
+function renderNotas(){
+  var el=document.getElementById('screen-notas');
+  var notas=DATA.notas||{};
   var html='';
 
+  // Group pills
   html+='<div class="pills-wrap">';
-  html+='<div class="pill'+(regFilter==='TODOS'?' active':'')+'" onclick="regFilter=\'TODOS\';renderRegistro()">TODOS</div>';
+  html+='<div class="pill'+(notasFilter==='TODOS'?' active':'')+'" onclick="notasFilter=\'TODOS\';renderNotas()">TODOS</div>';
   GRP_KEYS.forEach(function(g){
-    html+='<div class="pill'+(regFilter===g?' active':'')+'" onclick="regFilter=\''+g+'\';renderRegistro()">G'+g+'</div>';
+    html+='<div class="pill'+(notasFilter===g?' active':'')+'" onclick="notasFilter=\''+g+'\';renderNotas()">G'+g+'</div>';
   });
   html+='</div>';
 
@@ -565,24 +420,25 @@ function renderRegistro(){
 
   var currentJ=0;
   ordered.forEach(function(p){
-    if(regFilter!=='TODOS'&&p.g!==regFilter) return;
+    if(notasFilter!=='TODOS'&&p.g!==notasFilter) return;
     if(p.j!==currentJ){
       currentJ=p.j;
       html+='<div class="section-sep">▸ JORNADA '+p.j+' &nbsp;·&nbsp; '+FECHA_J[p.j]+'</div>';
     }
-    var bets=apuestas[p.id]||[];
-    var nBets=bets.length;
-    var isOpen=regOpenMatchId===p.id;
+    var hasNota=!!(notas[p.id]&&notas[p.id].trim());
+    var isOpen=notasOpenId===p.id;
 
     html+='<div class="match-card" id="mc-'+p.id+'">';
-    html+='<div class="match-head" onclick="toggleMatch(\''+p.id+'\')">';
+    html+='<div class="match-head" onclick="toggleNota(\''+p.id+'\')">';
     html+='<div class="badge">G'+p.g+' J'+p.j+'</div>';
     html+='<div class="match-teams">'+p.l.e+' '+esc(p.l.n)+' <span style="color:var(--txt3)">vs</span> '+esc(p.v.n)+' '+p.v.e+'</div>';
-    if(nBets>0) html+='<div class="match-bet-count">'+nBets+' apuesta'+(nBets!==1?'s':'')+'</div>';
+    html+='<div class="match-date">'+p.f+'</div>';
+    html+='<div class="match-note-dot '+(hasNota?'has-note':'no-note')+'" title="'+(hasNota?'Con nota':'Sin nota')+'"></div>';
     html+='<div class="match-chevron'+(isOpen?' open':'')+'">▼</div>';
     html+='</div>';
+
     html+='<div class="match-body'+(isOpen?' open':'')+'" id="mb-'+p.id+'">';
-    if(isOpen) html+=buildMatchBody(p.id);
+    if(isOpen) html+=buildNotaBody(p.id);
     html+='</div>';
     html+='</div>';
   });
@@ -590,195 +446,216 @@ function renderRegistro(){
   el.innerHTML=html;
 }
 
-function toggleMatch(pid){
+function toggleNota(pid){
   var body=document.getElementById('mb-'+pid);
   var card=document.getElementById('mc-'+pid);
   if(!body||!card) return;
   var chv=card.querySelector('.match-chevron');
 
-  if(regOpenMatchId===pid){
-    regOpenMatchId=null;
+  if(notasOpenId===pid){
+    notasOpenId=null;
     body.className='match-body'; body.innerHTML='';
     if(chv) chv.className='match-chevron';
   } else {
-    if(regOpenMatchId){
-      var pb=document.getElementById('mb-'+regOpenMatchId);
-      var pc=document.getElementById('mc-'+regOpenMatchId);
+    if(notasOpenId){
+      var pb=document.getElementById('mb-'+notasOpenId);
+      var pc=document.getElementById('mc-'+notasOpenId);
       if(pb){ pb.className='match-body'; pb.innerHTML=''; }
       if(pc){ var pchv=pc.querySelector('.match-chevron'); if(pchv) pchv.className='match-chevron'; }
     }
-    regOpenMatchId=pid;
-    body.innerHTML=buildMatchBody(pid);
+    notasOpenId=pid;
+    body.innerHTML=buildNotaBody(pid);
     body.className='match-body open';
     if(chv) chv.className='match-chevron open';
   }
 }
 
-function buildMatchBody(pid){
-  var bets=(DATA.apuestas&&DATA.apuestas[pid])||[];
+function buildNotaBody(pid){
+  var notas=DATA.notas||{};
+  var texto=notas[pid]||'';
   var html='';
-  bets.forEach(function(b){ html+=buildBetEntry(pid,b); });
-
-  // Add-bet buttons
-  html+='<div style="display:-webkit-flex;display:flex;gap:6px;margin-top:4px;">';
-  PARTICIPANTES.forEach(function(name){
-    html+='<button class="btn-add-bet" onclick="addBet(\''+pid+'\',\''+escQ(name)+'\')">'+PLAYER_EMOJI[name]+'<br>'+esc(name)+'</button>';
-  });
+  html+='<textarea class="nota-textarea" id="ta-'+pid+'" placeholder="Escribe tus notas sobre este partido…">'+esc(texto)+'</textarea>';
+  html+='<div class="nota-actions">';
+  html+='<button class="btn-save" onclick="saveNota(\''+pid+'\')">Guardar</button>';
+  html+='<button class="btn-clear" onclick="clearNota(\''+pid+'\')">✕ Borrar</button>';
+  html+='<span class="save-msg" id="smsg-'+pid+'">▸ Guardado ✓</span>';
   html+='</div>';
   return html;
 }
 
-function buildBetEntry(pid, b){
-  var cls=PLAYER_CSS[b.player]||'angel';
-  // ganancia coloring
-  var ganCls='';
-  if(b.ganancia!==''&&b.ganancia!==null&&b.ganancia!==undefined&&b.ganancia!==''){
-    var g=parseFloat(b.ganancia), im=parseFloat(b.importe)||0;
-    if(!isNaN(g)) ganCls=(g-im)>=0 ? ' gan-ok' : ' gan-ko';
+function saveNota(pid){
+  var ta=document.getElementById('ta-'+pid);
+  if(!ta) return;
+  var texto=ta.value;
+  if(!DATA.notas) DATA.notas={};
+  DATA.notas[pid]=texto;
+
+  apiPut(DATA, function(err){
+    if(err){ setSyncDot('error'); return; }
+    // update dot in header of card
+    var card=document.getElementById('mc-'+pid);
+    if(card){
+      var dot=card.querySelector('.match-note-dot');
+      if(dot){
+        dot.className='match-note-dot '+(texto.trim()?'has-note':'no-note');
+        dot.title=texto.trim()?'Con nota':'Sin nota';
+      }
+    }
+    var msg=document.getElementById('smsg-'+pid);
+    if(msg){ msg.style.display='inline'; setTimeout(function(){ msg.style.display='none'; }, 2500); }
+    renderResumen();
+  });
+}
+
+function clearNota(pid){
+  var ta=document.getElementById('ta-'+pid);
+  if(ta) ta.value='';
+  if(!DATA.notas) DATA.notas={};
+  DATA.notas[pid]='';
+
+  apiPut(DATA, function(err){
+    if(err){ setSyncDot('error'); return; }
+    var card=document.getElementById('mc-'+pid);
+    if(card){
+      var dot=card.querySelector('.match-note-dot');
+      if(dot){ dot.className='match-note-dot no-note'; dot.title='Sin nota'; }
+    }
+    var msg=document.getElementById('smsg-'+pid);
+    if(msg){ msg.style.display='inline'; setTimeout(function(){ msg.style.display='none'; }, 2500); }
+    renderResumen();
+  });
+}
+
+// ===================== BUSQUEDA =====================
+var busquedaQuery = '';
+var busquedaTeam  = '';  // nombre exacto del equipo seleccionado
+
+// Build sorted list of all unique teams with emoji
+var ALL_TEAMS = (function(){
+  var map = {};
+  PARTIDOS.forEach(function(p){
+    map[p.l.n] = p.l.e;
+    map[p.v.n] = p.v.e;
+  });
+  var arr = [];
+  for(var name in map) arr.push({n: name, e: map[name]});
+  arr.sort(function(a,b){ return a.n.localeCompare(b.n,'es'); });
+  return arr;
+})();
+
+function getMatchesForTeam(teamName){
+  // Returns all PARTIDOS where the team plays, with note attached
+  return PARTIDOS.filter(function(p){
+    return p.l.n === teamName || p.v.n === teamName;
+  });
+}
+
+function renderBusqueda(){
+  var el = document.getElementById('screen-busqueda');
+  var notas = DATA.notas || {};
+  var html = '';
+
+  // Search box
+  html += '<div class="search-wrap">';
+  html += '<span class="search-icon">🔍</span>';
+  html += '<input type="search" class="search-input" id="search-inp" placeholder="Buscar equipo…" value="'+esc(busquedaQuery)+'" oninput="onSearchInput(this.value)">';
+  html += '</div>';
+
+  // Filtered team list
+  var q = busquedaQuery.toLowerCase().trim();
+  var filtered = q
+    ? ALL_TEAMS.filter(function(t){ return t.n.toLowerCase().indexOf(q) >= 0; })
+    : ALL_TEAMS;
+
+  // Team pills — show filtered list (scrollable)
+  if(filtered.length){
+    html += '<div class="team-pills">';
+    filtered.forEach(function(t){
+      var isActive = busquedaTeam === t.n;
+      html += '<div class="team-pill'+(isActive?' active':'')+'" onclick="selectTeam(\''+escQ(t.n)+'\')">';
+      html += t.e+' '+esc(t.n);
+      html += '</div>';
+    });
+    html += '</div>';
   }
 
-  var html='';
-  html+='<div class="bet-entry" id="be-'+b.id+'">';
-
-  // Head: player tag + delete
-  html+='<div class="bet-entry-head">';
-  html+='<span class="bet-player-tag '+cls+'-tag">'+PLAYER_EMOJI[b.player]+' '+esc(b.player)+'</span>';
-  html+='<button class="bet-del" onclick="deleteBet(\''+escQ(pid)+'\',\''+escQ(b.id)+'\')">✕ Eliminar</button>';
-  html+='</div>';
-
-  // Row 1: importe + cuota
-  html+='<div class="bet-grid">';
-  html+='<div class="bet-field">';
-  html+='<label>Importe €</label>';
-  html+='<input type="number" inputmode="decimal" class="bet-input bf-num" id="imp-'+b.id+'" value="'+esc(b.importe)+'" placeholder="0.00" step="0.01">';
-  html+='</div>';
-  html+='<div class="bet-field">';
-  html+='<label>Cuota</label>';
-  html+='<input type="number" inputmode="decimal" class="bet-input bf-num" id="cuo-'+b.id+'" value="'+esc(b.cuota)+'" placeholder="1.80" step="0.01" min="1">';
-  html+='</div>';
-  html+='<div class="bet-field">';
-  html+='<label>Ganancia €</label>';
-  html+='<input type="number" inputmode="decimal" class="bet-input bf-num'+ganCls+'" id="gan-'+b.id+'" value="'+esc(b.ganancia)+'" placeholder="pendiente" step="0.01">';
-  html+='</div>';
-  html+='</div>';
-
-  // Row 2: selecciones (textarea)
-  html+='<div class="bet-field" style="margin-bottom:10px;">';
-  html+='<label>Selecciones / descripción</label>';
-  html+='<textarea class="bet-input bf-sel" id="sel-'+b.id+'" placeholder="Ej: 1X2 Local, +2.5 goles, Ambos marcan…">'+esc(b.selecciones)+'</textarea>';
-  html+='</div>';
-
-  // Save
-  html+='<div class="bet-save-row">';
-  html+='<button class="btn-save" onclick="saveBet(\''+escQ(pid)+'\',\''+escQ(b.id)+'\')">Guardar</button>';
-  html+='<span class="save-msg" id="smsg-'+b.id+'">▸ Guardado ✓</span>';
-  html+='</div>';
-
-  html+='</div>'; // .bet-entry
-  return html;
-}
-
-// ===================== ACTIONS =====================
-function addBet(pid, player){
-  if(!DATA.apuestas) DATA.apuestas={};
-  if(!DATA.apuestas[pid]) DATA.apuestas[pid]=[];
-  DATA.apuestas[pid].push({ id:genId(), player:player, importe:'', cuota:'', ganancia:'', selecciones:'', status:'' });
-  var body=document.getElementById('mb-'+pid);
-  if(body) body.innerHTML=buildMatchBody(pid);
-}
-
-function saveBet(pid, bid){
-  if(!DATA.apuestas||!DATA.apuestas[pid]) return;
-  var bet=null;
-  DATA.apuestas[pid].forEach(function(b){ if(b.id===bid) bet=b; });
-  if(!bet) return;
-
-  var impEl=document.getElementById('imp-'+bid);
-  var cuoEl=document.getElementById('cuo-'+bid);
-  var ganEl=document.getElementById('gan-'+bid);
-  var selEl=document.getElementById('sel-'+bid);
-
-  if(impEl) bet.importe=impEl.value;
-  if(cuoEl) bet.cuota=cuoEl.value;
-  if(ganEl) bet.ganancia=ganEl.value;
-  if(selEl) bet.selecciones=selEl.value;
-
-  apiPut(DATA, function(err){
-    if(err){ setSyncDot('error'); return; }
-    var msg=document.getElementById('smsg-'+bid);
-    if(msg){ msg.style.display='inline'; setTimeout(function(){ msg.style.display='none'; },2500); }
-    // update ganancia field color without full re-render
-    var ganInput=document.getElementById('gan-'+bid);
-    if(ganInput&&bet.ganancia!==''){
-      var g=parseFloat(bet.ganancia), im=parseFloat(bet.importe)||0;
-      if(!isNaN(g)){ ganInput.className='bet-input bf-num'+((g-im)>=0?' gan-ok':' gan-ko'); }
-    }
-    renderResumen();
-  });
-}
-
-function deleteBet(pid, bid){
-  if(!DATA.apuestas||!DATA.apuestas[pid]) return;
-  DATA.apuestas[pid]=DATA.apuestas[pid].filter(function(b){ return b.id!==bid; });
-  apiPut(DATA, function(err){
-    if(err){ setSyncDot('error'); return; }
-    var body=document.getElementById('mb-'+pid);
-    if(body) body.innerHTML=buildMatchBody(pid);
-    renderResumen();
-  });
-}
-
-// ===================== WIN / FAIL =====================
-function findBet(pid, bid){
-  if(!DATA.apuestas||!DATA.apuestas[pid]) return null;
-  var found=null;
-  DATA.apuestas[pid].forEach(function(b){ if(b.id===bid) found=b; });
-  return found;
-}
-
-function applyWin(pid, bid){
-  var bet=findBet(pid,bid);
-  if(!bet) return;
-  if(bet.status==='won'){
-    // toggle back to pending
-    bet.status='';
-  } else {
-    if(bet.ganancia===''||bet.ganancia===null||bet.ganancia===undefined){
-      alert('Introduce primero la ganancia en el registro antes de marcar como ganada.');
-      return;
-    }
-    bet.status='won';
+  // Results
+  if(!busquedaTeam){
+    html += '<div class="empty-msg" style="padding-top:30px;">Selecciona un equipo<br><span style="font-size:12px;font-weight:400;color:var(--txt3)">para ver sus partidos y notas</span></div>';
+    el.innerHTML = html;
+    return;
   }
-  apiPut(DATA, function(err){
-    if(err){ setSyncDot('error'); return; }
-    var cls=PLAYER_CSS[bet.player];
-    if(openPlayerIds[bet.player]){
-      var panel=document.getElementById('pdetail-'+cls);
-      if(panel) panel.innerHTML=buildPlayerDetail(bet.player);
+
+  // Find team emoji
+  var teamEmoji = '';
+  ALL_TEAMS.forEach(function(t){ if(t.n===busquedaTeam) teamEmoji=t.e; });
+
+  // Header for selected team
+  html += '<div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:10px;margin-bottom:14px;padding:12px 14px;background:var(--surf);border:1px solid var(--brd2);border-radius:10px;">';
+  html += '<span style="font-size:28px;">'+teamEmoji+'</span>';
+  html += '<div><div style="font-size:17px;font-weight:700;color:var(--cyan);">'+esc(busquedaTeam)+'</div>';
+  // count notes
+  var matches = getMatchesForTeam(busquedaTeam);
+  var conNota = matches.filter(function(p){ return notas[p.id]&&notas[p.id].trim(); });
+  html += '<div style="font-size:11px;color:var(--txt2);">'+matches.length+' partidos · '+conNota.length+' con notas</div>';
+  html += '</div></div>';
+
+  // Show all matches for this team
+  if(!matches.length){
+    html += '<div class="empty-msg">Sin partidos encontrados.</div>';
+    el.innerHTML = html; return;
+  }
+
+  matches.forEach(function(p){
+    var isLocal = p.l.n === busquedaTeam;
+    var rival   = isLocal ? p.v : p.l;
+    var nota    = notas[p.id] || '';
+    var hasNota = !!(nota.trim());
+
+    html += '<div class="team-result-card">';
+
+    // Head
+    html += '<div class="team-result-head">';
+    html += '<div class="badge">G'+p.g+' J'+p.j+'</div>';
+    html += '<div class="team-result-rival">';
+    html += (isLocal
+      ? '<span style="color:var(--cyan)">'+teamEmoji+' '+esc(busquedaTeam)+'</span> <span style="color:var(--txt3)">vs</span> '+rival.e+' '+esc(rival.n)
+      : rival.e+' '+esc(rival.n)+' <span style="color:var(--txt3)">vs</span> <span style="color:var(--cyan)">'+teamEmoji+' '+esc(busquedaTeam)+'</span>');
+    html += '</div>';
+    html += '<div style="font-size:11px;color:var(--txt3);white-space:nowrap;">'+p.f+'</div>';
+    html += '</div>';
+
+    // Nota content
+    if(hasNota){
+      html += '<div class="team-result-nota">'+esc(nota)+'</div>';
+      html += '<div style="padding:0 14px 10px;"><span class="team-result-goto" onclick="irANota(\''+p.id+'\')">✏️ Editar nota</span></div>';
+    } else {
+      html += '<div style="padding:12px 14px;font-size:12px;font-style:italic;color:var(--txt3);">Sin notas para este partido. <span class="team-result-goto" onclick="irANota(\''+p.id+'\')">✏️ Añadir nota</span></div>';
     }
-    renderResumen();
+
+    html += '</div>';
   });
+
+  el.innerHTML = html;
 }
 
-function applyFail(pid, bid){
-  var bet=findBet(pid,bid);
-  if(!bet) return;
-  if(bet.status==='failed'){
-    // toggle back to pending
-    bet.status='';
-  } else {
-    bet.status='failed';
+function onSearchInput(val){
+  busquedaQuery = val;
+  // If selected team no longer matches, deselect
+  if(busquedaTeam){
+    var q = val.toLowerCase().trim();
+    if(q && busquedaTeam.toLowerCase().indexOf(q) < 0) busquedaTeam = '';
   }
-  apiPut(DATA, function(err){
-    if(err){ setSyncDot('error'); return; }
-    var cls=PLAYER_CSS[bet.player];
-    if(openPlayerIds[bet.player]){
-      var panel=document.getElementById('pdetail-'+cls);
-      if(panel) panel.innerHTML=buildPlayerDetail(bet.player);
-    }
-    renderResumen();
-  });
+  renderBusqueda();
 }
+
+function selectTeam(name){
+  busquedaTeam = (busquedaTeam === name) ? '' : name;
+  renderBusqueda();
+  // Refocus to keep keyboard context
+}
+
+function escQ(s){ if(!s) return ''; return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
 
 // ===================== START =====================
 window.addEventListener('DOMContentLoaded', function(){ init(); });
