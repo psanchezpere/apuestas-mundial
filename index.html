@@ -346,6 +346,8 @@ function showTab(tab){
 function renderAll(){ renderResumen(); renderNotas(); }
 
 // ===================== RESUMEN =====================
+var resumenOpenId = null;
+
 function renderResumen(){
   var el=document.getElementById('screen-resumen');
   var notas=DATA.notas||{};
@@ -360,11 +362,9 @@ function renderResumen(){
   html+='<div class="stat-card"><div class="sv">'+PARTIDOS.length+'</div><div class="sl">Total partidos</div></div>';
   html+='</div>';
 
-  // Notas existentes ordenadas J1→J3 A→L
-  var conNota=[];
   var ordered=[];
   [1,2,3].forEach(function(j){ GRP_KEYS.forEach(function(g){ PARTIDOS.forEach(function(p){ if(p.j===j&&p.g===g) ordered.push(p); }); }); });
-  ordered.forEach(function(p){ if(notas[p.id]&&notas[p.id].trim()) conNota.push(p); });
+  var conNota=ordered.filter(function(p){ return notas[p.id]&&notas[p.id].trim(); });
 
   if(!conNota.length){
     html+='<div class="empty-msg">Todavía no hay notas.<br><span style="font-size:12px;font-weight:400;color:var(--txt3)">Ve a ✏️ NOTAS para empezar.</span></div>';
@@ -376,18 +376,34 @@ function renderResumen(){
         html+='<div class="section-sep">▸ JORNADA '+p.j+' &nbsp;·&nbsp; '+FECHA_J[p.j]+'</div>';
       }
       var texto=notas[p.id]||'';
-      html+='<div class="nota-resumen-card" onclick="irANota(\''+p.id+'\')">';
-      html+='<div class="nota-resumen-head">';
+      var isOpen=resumenOpenId===p.id;
+
+      html+='<div class="nota-resumen-card" id="rc-'+p.id+'" style="cursor:pointer;padding:0;" onclick="toggleResumen(\''+p.id+'\')">';
+      // Head always visible
+      html+='<div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;gap:10px;padding:12px 14px;">';
       html+='<div class="badge">G'+p.g+' J'+p.j+'</div>';
       html+='<div class="nota-resumen-match">'+p.l.e+' '+esc(p.l.n)+' <span style="color:var(--txt3)">vs</span> '+esc(p.v.n)+' '+p.v.e+'</div>';
       html+='<div class="nota-resumen-date">'+p.f+'</div>';
+      html+='<div style="color:var(--txt3);font-size:12px;transition:transform .3s;transform:'+(isOpen?'rotate(180deg)':'rotate(0deg)')+'" id="rchev-'+p.id+'">▼</div>';
       html+='</div>';
-      html+='<div class="nota-resumen-preview">'+esc(texto)+'</div>';
+      // Preview line when closed
+      if(!isOpen){
+        html+='<div class="nota-resumen-preview" style="padding:0 14px 12px;margin-top:-4px;">'+esc(texto)+'</div>';
+      }
+      // Full nota when open
+      if(isOpen){
+        html+='<div style="border-top:1px solid var(--brd);padding:13px 14px;font-size:13px;color:var(--txt2);line-height:1.7;white-space:pre-wrap;word-break:break-word;">'+esc(texto)+'</div>';
+      }
       html+='</div>';
     });
   }
 
   el.innerHTML=html;
+}
+
+function toggleResumen(pid){
+  resumenOpenId = (resumenOpenId===pid) ? null : pid;
+  renderResumen();
 }
 
 function irANota(pid){
